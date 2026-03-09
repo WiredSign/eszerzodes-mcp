@@ -1,0 +1,14 @@
+services:
+  mcp:
+    build: .
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - NODE_ENV=production
+      # Auth config: map MCP API keys to Eszerződés.hu tokens
+      # Option A: Individual env vars
+      # - MCP_KEY_client1=eszerzodes_bearer_token_here
+      # Option B: JSON map
+      # - MCP_KEY_MAP={"ESZ_MCP_client1":"eszerzodes_token_1","ESZ_MCP_client2":"eszerzodes_token_2"}
+    restart: unless-stopped
