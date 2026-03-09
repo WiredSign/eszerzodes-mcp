@@ -70,16 +70,22 @@ Ezután a kliens az `ESZ_MCP_ugyfel1` kulcsot küldi, a szerver pedig leképezi 
 
 ### Claude Desktop
 
+> **Előfeltétel:** Node.js telepítése szükséges (v18+). Ellenőrzés: `node --version` | Telepítés: [nodejs.org](https://nodejs.org)
+
 Add hozzá a `claude_desktop_config.json` fájlhoz:
 
 ```json
 {
   "mcpServers": {
     "eszerzodes": {
-      "url": "http://localhost:3000/mcp",
-      "headers": {
-        "Authorization": "Bearer <API_TOKENED>"
-      }
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "http://localhost:3000/mcp",
+        "--header",
+        "Authorization: Bearer <API_TOKENED>"
+      ]
     }
   }
 }
@@ -88,6 +94,9 @@ Add hozzá a `claude_desktop_config.json` fájlhoz:
 **Fájl helye:**
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
+
+> **Figyelem:** A `claude_desktop_config.json` fájlnak egyetlen JSON objektumnak kell lennie. Ha a fájl nem létezik, hozd létre. Ha már van benne tartalom (pl. `"preferences"`), az `"mcpServers"` részt ugyanabba az objektumba kell tenni vesszővel elválasztva.
+> Mentés után **teljesen zárd be** a Claude Desktop-ot (macOS: Cmd+Q, Windows: jobb klikk a tálcán → Kilépés), majd indítsd újra.
 
 ### Claude Code (CLI)
 

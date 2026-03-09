@@ -14,7 +14,7 @@ export const BODY = `
     <a class="repo-name" href="#">mcp-server</a>
     <span class="repo-badge">Public</span>
     <div class="repo-actions">
-      <button class="repo-btn" onclick="copyText('https://mcp.eszerzodes.hu/mcp')">
+      <button class="repo-btn" onclick="copyText('https://api.eszerzodes.hu/mcp')">
         <svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
         URL másolás
       </button>
@@ -172,27 +172,32 @@ export const BODY = `
           <button class="ai-pill" style="--ai-c:#2B88D8" onclick="switchAi(event,'cc-copilot')"><span class="dot"></span>Copilot</button>
         </div>
         <div id="cc-claude-desktop" class="ai-config active">
-          <p>Szerkeszd a <code class="inline-code">claude_desktop_config.json</code> fájlt:</p>
+          <p>Szerkeszd a <code class="inline-code">claude_desktop_config.json</code> fájlt (Előfeltétel: Node.js telepítése szükséges):</p>
           <pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"url"</span>: <span class="str">"https://mcp.eszerzodes.hu/mcp"</span>,
-      <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
-      }
+      <span class="str">"command"</span>: <span class="str">"npx"</span>,
+      <span class="str">"args"</span>: [
+        <span class="str">"-y"</span>,
+        <span class="str">"mcp-remote"</span>,
+        <span class="str">"https://api.eszerzodes.hu/mcp"</span>,
+        <span class="str">"--header"</span>,
+        <span class="str">"Authorization: Bearer &lt;TOKEN&gt;"</span>
+      ]
     }
   }
 }</code></pre>
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
         </div>
         <div id="cc-claude-code" class="ai-config"><pre class="code-block"><code>claude mcp add eszerzodes \\
   --transport http \\
-  https://mcp.eszerzodes.hu/mcp \\
+  https://api.eszerzodes.hu/mcp \\
   -H "Authorization: Bearer &lt;TOKEN&gt;"</code></pre></div>
-        <div id="cc-cursor" class="ai-config"><p>Settings → MCP Servers → Add:<br><strong>URL:</strong> <code class="inline-code">https://mcp.eszerzodes.hu/mcp</code><br><strong>Header:</strong> <code class="inline-code">Authorization: Bearer &lt;TOKEN&gt;</code></p></div>
+        <div id="cc-cursor" class="ai-config"><p>Settings → MCP Servers → Add:<br><strong>URL:</strong> <code class="inline-code">https://api.eszerzodes.hu/mcp</code><br><strong>Header:</strong> <code class="inline-code">Authorization: Bearer &lt;TOKEN&gt;</code></p></div>
         <div id="cc-windsurf" class="ai-config"><p>Szerkeszd a <code class="inline-code">~/.codeium/windsurf/mcp_config.json</code> fájlt:</p><pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"serverUrl"</span>: <span class="str">"https://mcp.eszerzodes.hu/mcp"</span>,
+      <span class="str">"serverUrl"</span>: <span class="str">"https://api.eszerzodes.hu/mcp"</span>,
       <span class="str">"headers"</span>: {
         <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
       }
@@ -202,21 +207,21 @@ export const BODY = `
         <div id="cc-cline" class="ai-config"><p>VS Code-ban: Cline → MCP Servers → Configure → szerkeszd a <code class="inline-code">cline_mcp_settings.json</code> fájlt:</p><pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"url"</span>: <span class="str">"https://mcp.eszerzodes.hu/mcp"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp"</span>,
       <span class="str">"headers"</span>: {
         <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
       }
     }
   }
 }</code></pre></div>
-        <div id="cc-chatgpt" class="ai-config"><p>ChatGPT Desktop → Settings → Beta features → MCP Servers → Add:</p><pre class="code-block"><code>URL:    https://mcp.eszerzodes.hu/mcp
+        <div id="cc-chatgpt" class="ai-config"><p>ChatGPT Desktop → Settings → Beta features → MCP Servers → Add:</p><pre class="code-block"><code>URL:    https://api.eszerzodes.hu/mcp
 Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
         <div id="cc-copilot" class="ai-config"><p>VS Code-ban add hozzá a <code class="inline-code">.vscode/settings.json</code> fájlhoz:</p><pre class="code-block"><code>{
   <span class="str">"github.copilot.chat.mcp.servers"</span>: [
     {
       <span class="str">"name"</span>: <span class="str">"eszerzodes"</span>,
       <span class="str">"type"</span>: <span class="str">"http"</span>,
-      <span class="str">"url"</span>: <span class="str">"https://mcp.eszerzodes.hu/mcp"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp"</span>,
       <span class="str">"headers"</span>: {
         <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
       }
@@ -253,16 +258,22 @@ docker compose up -d</code></pre></div>
           <button class="ai-pill" style="--ai-c:#10A37F" onclick="switchAi(event,'sc-chatgpt')"><span class="dot"></span>ChatGPT</button>
           <button class="ai-pill" style="--ai-c:#2B88D8" onclick="switchAi(event,'sc-copilot')"><span class="dot"></span>Copilot</button>
         </div>
-        <div id="sc-claude-desktop" class="ai-config active"><p>Szerkeszd a <code class="inline-code">claude_desktop_config.json</code> fájlt:</p><pre class="code-block"><code>{
+        <div id="sc-claude-desktop" class="ai-config active"><p>Szerkeszd a <code class="inline-code">claude_desktop_config.json</code> fájlt (Előfeltétel: Node.js telepítése szükséges):</p><pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"url"</span>: <span class="str">"http://localhost:3000/mcp"</span>,
-      <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
-      }
+      <span class="str">"command"</span>: <span class="str">"npx"</span>,
+      <span class="str">"args"</span>: [
+        <span class="str">"-y"</span>,
+        <span class="str">"mcp-remote"</span>,
+        <span class="str">"http://localhost:3000/mcp"</span>,
+        <span class="str">"--header"</span>,
+        <span class="str">"Authorization: Bearer &lt;TOKEN&gt;"</span>
+      ]
     }
   }
-}</code></pre></div>
+}</code></pre>
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
+        </div>
         <div id="sc-claude-code" class="ai-config"><pre class="code-block"><code>claude mcp add eszerzodes \\
   --transport http \\
   http://localhost:3000/mcp \\
