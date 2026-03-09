@@ -544,12 +544,19 @@ Returns the updated contract object.`,
         })
         .optional()
         .describe("Optional partner details to pre-fill"),
+      accompanying_message: z
+        .string()
+        .optional()
+        .describe("Custom email message to accompany the email notification / Kísérőlevél az email értesítőhöz"),
     },
     async (params) => {
       const body: Record<string, unknown> = {
         email: params.email,
         position: params.position,
       };
+      if (params.accompanying_message) {
+        body.accompanying_message = params.accompanying_message;
+      }
       if (params.partner_details) {
         body.partner_details = params.partner_details;
       }
