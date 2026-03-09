@@ -9,7 +9,7 @@ Az Eszerződés.hu MCP szerver lehetővé teszi, hogy AI eszközökkel (Claude, 
 ### 1. Klónozás és build
 
 ```bash
-git clone <repo-url>
+git clone https://github.com/WiredSign/eszerzodes-mcp.git
 cd eszerzodes-mcp
 npm install
 npm run build
