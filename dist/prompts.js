@@ -1,24 +1,21 @@
-import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
-import { z } from "zod";
-
-export function registerPrompts(server: McpServer) {
-  // ── szerzodes-attekintes ─────────────────────────────────────────────
-  server.prompt(
-    "szerzodes-attekintes",
-    `Szerződések áttekintése, dashboard. Használd amikor a felhasználó általános képet szeretne a szerződéseiről, statisztikákat kér, vagy "mutasd a szerződéseimet" jellegű kérést fogalmaz meg.`,
-    {
-      szuro: z
-        .string()
-        .optional()
-        .describe("Szűrő: aktív, lejárt, tervezet, vagy mind (alapértelmezett: mind)"),
-    },
-    ({ szuro }) => ({
-      messages: [
-        {
-          role: "user" as const,
-          content: {
-            type: "text" as const,
-            text: `Adj átfogó képet a szerződéseimről. Kövesd ezt a munkafolyamatot:
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.registerPrompts = registerPrompts;
+const zod_1 = require("zod");
+function registerPrompts(server) {
+    // ── szerzodes-attekintes ─────────────────────────────────────────────
+    server.prompt("szerzodes-attekintes", `Szerződések áttekintése, dashboard. Használd amikor a felhasználó általános képet szeretne a szerződéseiről, statisztikákat kér, vagy "mutasd a szerződéseimet" jellegű kérést fogalmaz meg.`, {
+        szuro: zod_1.z
+            .string()
+            .optional()
+            .describe("Szűrő: aktív, lejárt, tervezet, vagy mind (alapértelmezett: mind)"),
+    }, ({ szuro }) => ({
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `Adj átfogó képet a szerződéseimről. Kövesd ezt a munkafolyamatot:
 
 ## 1. Adatgyűjtés (párhuzamosan)
 
@@ -65,29 +62,23 @@ ${szuro ? `A felhasználó a következő szűrőt kérte: "${szuro}".
 - A dátumokat YYYY.MM.DD formátumban jelenítsd meg
 - Ha nincs szerződés, javasolj sablon keresést: "Szeretnéd megnézni az elérhető sablonokat?"
 - Ha sok a lejáró szerződés, emeld ki figyelmeztetésként`,
-          },
-        },
-      ],
-    })
-  );
-
-  // ── szerzodes-letrehozas ─────────────────────────────────────────────
-  server.prompt(
-    "szerzodes-letrehozas",
-    `Új szerződés létrehozása sablonból lépésről lépésre. Használd amikor a felhasználó szerződést akar készíteni, létrehozni, vagy "csinálj egy NDA-t" jellegű kérést fogalmaz meg.`,
-    {
-      sablon: z
-        .string()
-        .optional()
-        .describe("Sablon neve vagy típusa, pl: NDA, bérleti, megbízási"),
-    },
-    ({ sablon }) => ({
-      messages: [
-        {
-          role: "user" as const,
-          content: {
-            type: "text" as const,
-            text: `Segíts új szerződést létrehozni. Kövesd szigorúan ezt a sorrendet:
+                },
+            },
+        ],
+    }));
+    // ── szerzodes-letrehozas ─────────────────────────────────────────────
+    server.prompt("szerzodes-letrehozas", `Új szerződés létrehozása sablonból lépésről lépésre. Használd amikor a felhasználó szerződést akar készíteni, létrehozni, vagy "csinálj egy NDA-t" jellegű kérést fogalmaz meg.`, {
+        sablon: zod_1.z
+            .string()
+            .optional()
+            .describe("Sablon neve vagy típusa, pl: NDA, bérleti, megbízási"),
+    }, ({ sablon }) => ({
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `Segíts új szerződést létrehozni. Kövesd szigorúan ezt a sorrendet:
 
 ## 1. Sablon keresés
 
@@ -146,31 +137,25 @@ Sikeres létrehozás után kínáld fel:
 - Ne hozz létre szerződést amíg a felhasználó nem hagyta jóvá a mezőértékeket
 - Ha a felhasználó PDF-ből vagy HTML-ből akar szerződést, használd a contract_create_from_pdf vagy contract_create_from_html tool-t
 - Dátumokat YYYY-MM-DD formátumban küldd az API-nak`,
-          },
-        },
-      ],
-    })
-  );
-
-  // ── lejaro-szerzodesek ───────────────────────────────────────────────
-  server.prompt(
-    "lejaro-szerzodesek",
-    `Lejáró szerződések ellenőrzése és figyelmeztetés. Használd amikor a felhasználó lejáró szerződésekről kérdez, "mi jár le hamarosan", vagy időszakos ellenőrzést kér.`,
-    {
-      napok: z
-        .string()
-        .optional()
-        .describe("Napok száma (alapértelmezett: 30)"),
-    },
-    ({ napok }) => {
-      const days = napok ? parseInt(napok, 10) || 30 : 30;
-      return {
-        messages: [
-          {
-            role: "user" as const,
-            content: {
-              type: "text" as const,
-              text: `Ellenőrizd a hamarosan lejáró szerződéseket és adj részletes riportot.
+                },
+            },
+        ],
+    }));
+    // ── lejaro-szerzodesek ───────────────────────────────────────────────
+    server.prompt("lejaro-szerzodesek", `Lejáró szerződések ellenőrzése és figyelmeztetés. Használd amikor a felhasználó lejáró szerződésekről kérdez, "mi jár le hamarosan", vagy időszakos ellenőrzést kér.`, {
+        napok: zod_1.z
+            .string()
+            .optional()
+            .describe("Napok száma (alapértelmezett: 30)"),
+    }, ({ napok }) => {
+        const days = napok ? parseInt(napok, 10) || 30 : 30;
+        return {
+            messages: [
+                {
+                    role: "user",
+                    content: {
+                        type: "text",
+                        text: `Ellenőrizd a hamarosan lejáró szerződéseket és adj részletes riportot.
 
 ## 1. Adatlekérés
 
@@ -226,30 +211,24 @@ Minden lejáró szerződéshez kínálj lehetőségeket:
 - Dátumokat YYYY.MM.DD formátumban jelenítsd meg
 - Mindig add meg a hátralévő napok számát is
 - A kritikus (7 napon belüli) szerződéseket mindig emeld ki`,
-            },
-          },
-        ],
-      };
-    }
-  );
-
-  // ── szerzodes-riport ─────────────────────────────────────────────────
-  server.prompt(
-    "szerzodes-riport",
-    `Részletes szerződés riport és statisztika generálás. Használd amikor a felhasználó riportot, összefoglalót, kimutatást kér a szerződéseiről.`,
-    {
-      tipus: z
-        .string()
-        .optional()
-        .describe("Riport típusa: teljes, partner, sablon, vagy státusz (alapértelmezett: teljes)"),
-    },
-    ({ tipus }) => ({
-      messages: [
-        {
-          role: "user" as const,
-          content: {
-            type: "text" as const,
-            text: `Készíts átfogó riportot a szerződéseimről.
+                    },
+                },
+            ],
+        };
+    });
+    // ── szerzodes-riport ─────────────────────────────────────────────────
+    server.prompt("szerzodes-riport", `Részletes szerződés riport és statisztika generálás. Használd amikor a felhasználó riportot, összefoglalót, kimutatást kér a szerződéseiről.`, {
+        tipus: zod_1.z
+            .string()
+            .optional()
+            .describe("Riport típusa: teljes, partner, sablon, vagy státusz (alapértelmezett: teljes)"),
+    }, ({ tipus }) => ({
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `Készíts átfogó riportot a szerződéseimről.
 
 ## 1. Adatgyűjtés (párhuzamosan)
 
@@ -311,29 +290,23 @@ Generálva: [mai dátum]
 - Százalékokat 1 tizedesre kerekítsd
 - Dátumokat YYYY.MM.DD formátumban
 - Adj gyakorlati javaslatokat az adatok alapján`,
-          },
-        },
-      ],
-    })
-  );
-
-  // ── partner-kereso ───────────────────────────────────────────────────
-  server.prompt(
-    "partner-kereso",
-    `Partner keresés és a partner szerződéseinek áttekintése. Használd amikor a felhasználó egy adott partnerről kérdez, partnert keres, vagy "mi a helyzet a Kovács Kft-vel" jellegű kérést fogalmaz meg.`,
-    {
-      partner: z
-        .string()
-        .optional()
-        .describe("Partner neve, email címe vagy cégneve"),
-    },
-    ({ partner }) => ({
-      messages: [
-        {
-          role: "user" as const,
-          content: {
-            type: "text" as const,
-            text: `Keress meg egy partnert és mutasd a szerződéseit.
+                },
+            },
+        ],
+    }));
+    // ── partner-kereso ───────────────────────────────────────────────────
+    server.prompt("partner-kereso", `Partner keresés és a partner szerződéseinek áttekintése. Használd amikor a felhasználó egy adott partnerről kérdez, partnert keres, vagy "mi a helyzet a Kovács Kft-vel" jellegű kérést fogalmaz meg.`, {
+        partner: zod_1.z
+            .string()
+            .optional()
+            .describe("Partner neve, email címe vagy cégneve"),
+    }, ({ partner }) => ({
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `Keress meg egy partnert és mutasd a szerződéseit.
 
 ## 1. Partner keresés
 
@@ -378,30 +351,25 @@ A kiválasztott partnerhez hívd meg a \`party_contracts\` tool-t.
 - Ha a partner nem található, javasolj hasonló neveket a \`party_list\` alapján
 - Csoportosítsd a szerződéseket státusz szerint
 - Emeld ki ha van lejáró vagy aláíratlan szerződés`,
-          },
-        },
-      ],
-    })
-  );
-  // ── statusz-automata ─────────────────────────────────────────────────
-  server.prompt(
-    "statusz-automata",
-    `Szerződések státuszának automatikus ellenőrzése és eszkalálása. Használd amikor a felhasználó arra kér, hogy vizsgáld felül az elakadt vagy lejáró szerződéseket és frissítsd a belső státuszukat.`,
-    {
-      napok: z
-        .string()
-        .optional()
-        .describe("Hány nap után tekintünk egy várakozó szerződést elakadt/eszkalált állapotúnak (alap: 7)"),
-    },
-    ({ napok }) => {
-      const waitDays = napok ? parseInt(napok, 10) || 7 : 7;
-      return {
-        messages: [
-          {
-            role: "user" as const,
-            content: {
-              type: "text" as const,
-              text: `Nézd át a szerződéseimet és frissítsd a belső státuszokat a következő szabályok alapján.
+                },
+            },
+        ],
+    }));
+    // ── statusz-automata ─────────────────────────────────────────────────
+    server.prompt("statusz-automata", `Szerződések státuszának automatikus ellenőrzése és eszkalálása. Használd amikor a felhasználó arra kér, hogy vizsgáld felül az elakadt vagy lejáró szerződéseket és frissítsd a belső státuszukat.`, {
+        napok: zod_1.z
+            .string()
+            .optional()
+            .describe("Hány nap után tekintünk egy várakozó szerződést elakadt/eszkalált állapotúnak (alap: 7)"),
+    }, ({ napok }) => {
+        const waitDays = napok ? parseInt(napok, 10) || 7 : 7;
+        return {
+            messages: [
+                {
+                    role: "user",
+                    content: {
+                        type: "text",
+                        text: `Nézd át a szerződéseimet és frissítsd a belső státuszokat a következő szabályok alapján.
               
 ## 1. Adatok lekérése
 
@@ -450,25 +418,19 @@ Jóváhagyod, hogy végrehajtsam a fenti státusz módosításokat (\`contract_u
 
 ## 4. Végrehajtás
 Ha a felhasználó jóváhagyja, használd a \`contract_update_status\` parancsot ciklusban (párhuzamosítva a megfelelő belső státusz STRING elnevezésekkel) és jelentsd, mikor kész vagy.`,
-            },
-          },
-        ],
-      };
-    }
-  );
-
-  // ── munkatars-hozzaadasa ─────────────────────────────────────────────
-  server.prompt(
-    "munkatars-hozzaadasa",
-    `Új munkatárs meghívása a rendszerbe egyénileg szabályozott jogosultságokkal (4 kategória) és aláírási engedéllyel.`,
-    {},
-    () => ({
-      messages: [
-        {
-          role: "user" as const,
-          content: {
-            type: "text" as const,
-            text: `Vegyél fel egy új munkatársat a fiókba. 
+                    },
+                },
+            ],
+        };
+    });
+    // ── munkatars-hozzaadasa ─────────────────────────────────────────────
+    server.prompt("munkatars-hozzaadasa", `Új munkatárs meghívása a rendszerbe egyénileg szabályozott jogosultságokkal (4 kategória) és aláírási engedéllyel.`, {}, () => ({
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `Vegyél fel egy új munkatársat a fiókba. 
 
 A művelethez szükséges, hogy interaktívan, lépésről lépésre kérd be a szükséges adatokat tőlem, az alábbi sorrendben:
 
@@ -490,24 +452,18 @@ Ha mind a három információt megkaptad (Email, Kategória, Aláírási jog), k
 
 Miután jóváhagytam, hívd meg a \`coworker_add\` tool-t. 
 *(Technikai megjegyzés a végrehajtáshoz: passzold át a kért kategóriát és aláírási paramétert, amennyiben a tool támogatja őket).*`
-          }
-        }
-      ]
-    })
-  );
-
-  // ── folyamat-letrehozas ──────────────────────────────────────────────
-  server.prompt(
-    "folyamat-letrehozas",
-    `Egyedi munkafolyamatok / kanban táblák létrehozása. Az AI segít belső státuszok generálásában a kiválasztott folyamat alapján.`,
-    {},
-    () => ({
-      messages: [
-        {
-          role: "user" as const,
-          content: {
-            type: "text" as const,
-            text: `Hozz létre belső státuszokat a fiókomban, amikkel leképezhetünk egy komplett üzleti munkafolyamatot!
+                }
+            }
+        ]
+    }));
+    // ── folyamat-letrehozas ──────────────────────────────────────────────
+    server.prompt("folyamat-letrehozas", `Egyedi munkafolyamatok / kanban táblák létrehozása. Az AI segít belső státuszok generálásában a kiválasztott folyamat alapján.`, {}, () => ({
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `Hozz létre belső státuszokat a fiókomban, amikkel leképezhetünk egy komplett üzleti munkafolyamatot!
 
 Első lépésként ajánld fel nekem az alábbi 9 előre definiált munkafolyamatot, és kérdezd meg, hogy melyiket szeretném bevezetni:
 
@@ -526,9 +482,9 @@ Miután választottam (pl. az 1-est), listázd ki mik lesznek a státuszok ponto
 
 ## 3. Végrehajtás
 Ha jóváhagytam, használd a \`contract_status_create\` eszközt egyenként (vagy párhuzamosan), hogy létrehozd az összes fázist mint új belső státuszt a rendszeremben. Add át a nevet, szint és ikont a végpontnak.`
-          }
-        }
-      ]
-    })
-  );
+                }
+            }
+        ]
+    }));
 }
+//# sourceMappingURL=prompts.js.map

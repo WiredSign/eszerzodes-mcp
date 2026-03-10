@@ -88,12 +88,18 @@ export function createApiError(
   let validationErrors: Record<string, string[]> | undefined;
   try {
     const parsed = JSON.parse(body);
+    let detailedMessage = "";
+
     if (parsed.errors && typeof parsed.errors === "object") {
       validationErrors = parsed.errors as Record<string, string[]>;
+      detailedMessage = "\nValidation errors: " + JSON.stringify(validationErrors);
     }
-    // Use the API's message if available
+
     if (parsed.message && typeof parsed.message === "string") {
-      body = parsed.message;
+      body = parsed.message + detailedMessage;
+    } else {
+      // Fallback: If no message field, include the whole JSON string
+      body = JSON.stringify(parsed);
     }
   } catch {
     // body is not JSON, use as-is

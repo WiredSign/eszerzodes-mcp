@@ -103,10 +103,15 @@ Returns the complete contract object.`,
     "contract_create",
     `Creates a new contract from an existing template.
 
-Use this when the user wants to create a new contract based on a template.
-You can pre-fill template variables and specify partners.
+Use this when the user wants to create a contract based on a template.
+IMPORTANT RULES:
+1. partner_type MUST be provided if partner_details is given.
+2. Individual partners (partner_type: 1) MUST have mothers_name, birthday, and place_of_birth, phone, address.
+3. Partner emails MUST NOT be identical to the signed-in user's email.
+4. For multi-party contracts, provide enough unique partners in the array.
+5. In case of 400 Bad Request, ALWAYS check the raw API response body for the exact JSON validation error.
 
-Returns the created contract object with its ID and URL.`,
+Returns the created contract object.`,
     {
       contract_type_id: z
         .number()
@@ -200,9 +205,24 @@ Returns the created contract object with its ID and URL.`,
               .optional()
               .describe("Specific title for this partner"),
             partner_details: z
-              .record(z.unknown())
+              .object({
+                partner_type: z
+                  .number()
+                  .int()
+                  .optional()
+                  .describe("REQUIRED if partner_details is given. 1: Individual, 2: Business"),
+                signatory_name: z.string().optional(),
+                phone_number: z.string().optional(),
+                address: z.string().optional(),
+                mothers_name: z.string().optional().describe("REQUIRED for Individual (1)"),
+                birthday: z.string().optional().describe("REQUIRED for Individual (1). Format: YYYY-MM-DD"),
+                place_of_birth: z.string().optional().describe("REQUIRED for Individual (1)"),
+                company_name: z.string().optional(),
+                company_tax_number: z.string().optional(),
+                company_registered_office: z.string().optional(),
+              })
               .optional()
-              .describe("Optional partner details (name, address, etc.)"),
+              .describe("Optional partner details. If given, partner_type MUST be provided!"),
           })
         )
         .optional()
