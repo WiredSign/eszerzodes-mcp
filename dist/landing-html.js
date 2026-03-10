@@ -79,7 +79,7 @@ button, a, .skill-header, .prompt-row, .repo-btn, .ai-btn { transition: all 0.2s
 .readme-header svg{width:16px;height:16px;fill:var(--text-muted)}
 .readme-body{padding:1.5rem 2rem}
 .readme-body h1{font-size:1.75rem;font-weight:700;padding-bottom:.5rem;border-bottom:1px solid var(--border);margin-bottom:1rem}
-.readme-body h2{font-size:1.25rem;font-weight:600;padding-bottom:.35rem;border-bottom:1px solid var(--border);margin:1.5rem 0 .75rem}
+.readme-body h2{font-size:1.25rem;font-weight:600;padding-bottom:0rem;margin:.8rem 0 .8rem}
 .readme-body h3{font-size:1rem;font-weight:600;margin:1rem 0 .5rem}
 .readme-body p{color:var(--text-muted);line-height:1.7;margin-bottom:.75rem;font-size:.9rem}
 .readme-body a{color:var(--blue);text-decoration:none}
@@ -192,6 +192,227 @@ button, a, .skill-header, .prompt-row, .repo-btn, .ai-btn { transition: all 0.2s
 .prompt-copy{color:var(--text-subtle);font-size:.7rem;opacity:0;transition:opacity .15s;display:flex;align-items:center;gap:.25rem}
 .prompt-copy svg{width:14px;height:14px;fill:currentColor}
 .prompt-row:hover .prompt-copy{opacity:1}
+
+
+/* Categorized Prompts */
+.prompt-gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  margin-top: 1.5rem;
+}
+.prompt-cat {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+.pc-header {
+  padding: 0.8rem 1rem;
+  background: rgba(88, 166, 255, 0.05);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+.pc-body {
+  padding: 0.75rem;
+  flex: 1;
+}
+.pc-badge {
+  font-size: 0.65rem;
+  padding: 0.1rem 0.4rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  font-weight: 700;
+  background: var(--bg-hover);
+}
+.pc-badge.pro {
+  background: rgba(210, 153, 34, 0.15);
+  color: #d29922;
+  border: 1px solid rgba(210, 153, 34, 0.3);
+}
+.pc-badge.auto {
+  background: rgba(35, 134, 54, 0.15);
+  color: var(--green);
+  border: 1px solid rgba(35, 134, 54, 0.3);
+}
+@media (max-width: 768px) {
+  .prompt-gallery { grid-template-columns: 1fr; }
+}
+
+/* Workflow Marketplace */
+.wf-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+.wf-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  text-align: left;
+}
+.wf-card:hover {
+  border-color: var(--blue);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+}
+.wf-icon {
+  font-size: 2.2rem;
+  margin-bottom: 0.4rem;
+}
+.wf-title {
+  font-weight: 700;
+  font-size: 1.1rem;
+  color: var(--text);
+  margin: 0;
+}
+.wf-desc {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.5;
+  flex: 1;
+}
+.wf-steps {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin: 0.8rem 0 1.25rem;
+  padding: 0;
+}
+.wf-step {
+  font-size: 0.72rem;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+  background: var(--bg);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  border: 1px solid var(--border);
+  white-space: nowrap;
+}
+.wf-step:not(:last-child)::after {
+  content: '→';
+  color: var(--text-subtle);
+  margin-left: 0.2rem;
+  font-weight: bold;
+}
+.wf-s-1 { border-color: #8b949e66; background: #8b949e11; color: #8b949e; }
+.wf-s-2 { border-color: #f0883e44; background: #f0883e11; color: #f0883e; }
+.wf-s-3 { border-color: #f0883e66; background: #f0883e22; color: #f0883e; }
+.wf-s-4 { border-color: #d2992266; background: #d2992222; color: #d29922; }
+.wf-s-5 { border-color: #d2992288; background: #d2992233; color: #d29922; }
+.wf-s-6 { border-color: #3fb95066; background: #3fb95011; color: #3fb950; }
+
+.wf-btn {
+  width: 100%;
+  padding: 0.75rem;
+  background: var(--blue);
+  border: none;
+  color: white;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+.wf-btn:hover {
+  filter: brightness(1.1);
+  box-shadow: 0 4px 12px rgba(88,166,255,0.3);
+}
+
+/* Collapsible Sections (Compact & Premium) */
+.sec-banner {
+  background: rgba(22, 27, 34, 0.4);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--border);
+  border-radius: 4px;
+  margin: 0.25rem 0;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+.sec-banner:hover {
+  background: rgba(88, 166, 255, 0.03);
+  border-color: rgba(88, 166, 255, 0.3);
+  border-left-color: var(--blue);
+}
+.sec-banner.open {
+  background: rgba(88, 166, 255, 0.05);
+  border-color: rgba(88, 166, 255, 0.2);
+  border-left-color: var(--blue);
+  border-bottom: none;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-bottom: 0;
+}
+.sec-header {
+  padding: 0.3rem 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+.sec-title {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 500;
+  flex: 1;
+  color: var(--text-subtle);
+}
+.sec-banner:hover .sec-title, .sec-banner.open .sec-title {
+  color: var(--text);
+}
+.sec-chevron {
+  font-size: 0.6rem;
+  color: var(--text-muted);
+  transition: transform 0.2s;
+  opacity: 0.6;
+}
+.sec-banner.open .sec-chevron {
+  transform: rotate(90deg);
+  opacity: 1;
+  color: var(--blue);
+}
+.sec-content {
+  background: rgba(88, 166, 255, 0.015);
+  border: 1px solid rgba(88, 166, 255, 0.2);
+  border-top: none;
+  border-left: 3px solid var(--blue);
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding: 1rem 1.25rem 1.25rem;
+  margin-bottom: 1rem;
+}
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.sec-desc-inline {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  margin-top: -0.5rem;
+  margin-bottom: 1.25rem;
+}
 
 /* Footer */
 footer{text-align:center;padding:2rem 0 1rem;color:var(--text-subtle);font-size:.8rem;border-top:1px solid var(--border);margin-top:2rem}

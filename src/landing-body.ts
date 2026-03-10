@@ -34,7 +34,7 @@ export const BODY = `
       <svg viewBox="0 0 16 16"><path d="M2.75 14A1.75 1.75 0 0 1 1 12.25v-2.5a.75.75 0 0 1 1.5 0v2.5c0 .138.112.25.25.25h10.5a.25.25 0 0 0 .25-.25v-2.5a.75.75 0 0 1 1.5 0v2.5A1.75 1.75 0 0 1 13.25 14Z"/><path d="M7.25 7.689V2a.75.75 0 0 1 1.5 0v5.689l1.97-1.969a.749.749 0 1 1 1.06 1.06l-3.25 3.25a.749.749 0 0 1-1.06 0L4.22 6.78a.749.749 0 1 1 1.06-1.06l1.97 1.969Z"/></svg>
       Telepítés
     </a>
-    <a href="#skillek" class="tab-nav-item" style="text-decoration:none">
+    <a href="#skills-banner" class="tab-nav-item" onclick="toggleSection('skills', true)" style="text-decoration:none">
       <svg viewBox="0 0 16 16"><path d="M4 1.75C4 .784 4.784 0 5.75 0h5.5C12.216 0 13 .784 13 1.75v12.5A1.75 1.75 0 0 1 11.25 16h-5.5A1.75 1.75 0 0 1 4 14.25v-12.5ZM5.75 1.5a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h5.5a.25.25 0 0 0 .25-.25v-12.5a.25.25 0 0 0-.25-.25h-5.5Z"/></svg>
       AI Skillek
     </a>
@@ -42,7 +42,7 @@ export const BODY = `
       <svg viewBox="0 0 16 16"><path d="M11 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM9.5 3a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM4.5 9a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-1.5 1a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6-3.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-1.5 1a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM5 3a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM3.5 4a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM11 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-1.5 1a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"/></svg>
       44 eszköz
     </a>
-    <a href="#proba" class="tab-nav-item" style="text-decoration:none">
+    <a href="#gallery-banner" class="tab-nav-item" onclick="toggleSection('gallery', true)" style="text-decoration:none">
       <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 0 1 5.378 11.488l2.368 2.368a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-2.368-2.368A7 7 0 1 1 8 1Zm0 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11Z"/></svg>
       Próba promptok
     </a>
@@ -328,33 +328,14 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
 }</code></pre></div>
       </div>
 
-      <div class="skills-banner collapsible" id="skillek-banner" style="background:rgba(88,166,255,0.05); border:1px solid rgba(48,54,61,0.8); border-radius:8px; margin:1.5rem 0; scroll-margin-top:2rem; transition: all 0.3s ease-out;">
-        <div onclick="toggleSkills()" style="display:flex; justify-content:space-between; align-items:center; padding:1.2rem; cursor:pointer; user-select:none;" onmouseover="this.style.background='rgba(88,166,255,0.03)'" onmouseout="this.style.background='transparent'">
-          <h3 style="margin:0; display:flex; align-items:center; gap:0.5rem; font-size:1.1rem; color:var(--text); flex:1;">
-            <span>🧠 AI Skillek / MCP Promptok</span>
-            <span id="skills-chevron" style="color:var(--text-subtle); transition: transform 0.3s; font-size: 0.8rem; margin-left: 0.5rem;">▶</span>
-          </h3>
-          <div id="skills-badge" style="background:rgba(88,166,255,0.1); color:var(--blue); padding:0.1rem 0.6rem; border-radius:2rem; font-size:0.75rem; font-weight:600;">8 munkafolyamat</div>
-        </div>
-        
-        <div id="skills-content" style="display:none; padding: 0 1.2rem 1.2rem; border-top: 1px solid var(--border);">
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1.5rem; flex-wrap:wrap; margin: 1rem 0;">
-            <p style="margin:0; font-size:0.85rem; color:var(--text-muted); line-height:1.4; max-width:600px;">A 8 fő eszerződés munkafolyamat be van építve a szerverbe mint <strong>MCP Prompt</strong>, de külső plugin-ként is bekerülhetnek a Claude Desktop kliensedbe. Kattints a lenti "1-klikk telepítés" gombra, illeszd be a Terminálba, aminek a hatására létrejön a letöltött skillekkel egy <code class="inline-code">Eszerzodes-AI-Plugin</code> mappa a Mac Asztalodon (Desktop). Végül nyisd meg a Claude appban a <strong>Customize -> Skills -> Personal plugins [+]</strong> menüt és válaszd ki ezt a mappát!</p>
-            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items: stretch;">
-              <button class="skill-banner-btn" onclick="copyInstallCmd(this)" style="background:var(--bg-subtle); color:var(--text); border:1px solid rgba(88,166,255,0.4); cursor:pointer; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">💻 1-klikk letöltés az Asztalra (Terminal)</button>
-              <a class="skill-banner-btn" href="/api/download-skills" style="background:var(--blue); color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">📥 Letöltés (.zip)</a>
-            </div>
-          </div>
-          <div id="skills-container"></div>
-        </div>
-      </div>
 
-      <h2 id="eszkozok" style="scroll-margin-top: 2rem;">🧰 47 elérhető eszköz</h2>
+
+      <h2 id="eszkozok" style="scroll-margin-top: 2rem;">🧰 48 elérhető eszköz</h2>
       <div class="tool-grid" style="grid-template-columns:1fr 1fr">
 
         <!-- Szerződés Lekérdezések -->
         <div class="tool-card" onclick="toggleCard(this,event)">
-          <div class="tc-header"><span class="tc-icon">�</span><span class="tc-title">Szerződés Lekérdezések</span><span class="tc-count">5</span><span class="tc-chevron">▶</span></div>
+          <div class="tc-header"><span class="tc-icon">🔍</span><span class="tc-title">Szerződés Lekérdezések</span><span class="tc-count">5</span><span class="tc-chevron">▶</span></div>
           <div class="tc-desc">Szerződések listázása, keresése, részletek lekérése és lejáró tételek</div>
           <div class="tc-tools">
             <div class="tc-select-all"><label onclick="toggleAll(this,event)">Mind be/ki</label><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="toggleAll(this.closest('.tool-card'),event)"><span class="slider"></span></label></div>
@@ -474,19 +455,224 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
 
       </div>
 
-      <h2 id="proba" style="scroll-margin-top: 2rem;">💬 Próbáld ki — kérdezd az AI-t</h2>
-      <div class="prompt-row" onclick="copyText('Listázd ki az összes aktív szerződést')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Listázd ki az összes aktív szerződést&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
-      <div class="prompt-row" onclick="copyText('Melyek járnak le a következő 30 napban?')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Melyek járnak le a következő 30 napban?&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
-      <div class="prompt-row" onclick="copyText('Hozz létre egy NDA-t a Teszt Kft.-nek')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Hozz létre egy NDA-t a Teszt Kft.-nek&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
-      <div class="prompt-row" onclick="copyText('Mi a Kovács Kft. szerződéseinek státusza?')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Mi a Kovács Kft. szerződéseinek státusza?&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
-      <div class="prompt-row" onclick="copyText('Készíts riportot: státusz megoszlás, lejárók, top partnerek')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Készíts riportot: státusz megoszlás, lejárók, top partnerek&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
-      <div class="prompt-row" onclick="copyText('Keresd meg a bérleti sablont és küldj meghívót')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Keresd meg a bérleti sablont és küldj meghívót&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
-      <div class="prompt-row" onclick="copyText('Nézd át az aláírásra váró szerződéseimet, amik legalább 7 napja stagnálnak, és frissítsd a státuszukat sürgősre')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Nézd át az aláírásra váró szerződéseimet, amik legalább 7 napja stagnálnak, és frissítsd a státuszukat sürgősre&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
-      <div class="prompt-row" onclick="copyText('Vegyél fel egy új munkatársat, kérd be az e-mail címét, a jogkörét (admin, szerkesztő, stb.) és az aláírási jogot')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Vegyél fel egy új munkatársat, kérd be az e-mail címét, a jogkörét (admin, szerkesztő, stb.) és az aláírási jogot&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
-      <div class="prompt-row" onclick="copyText('Telepíts egy új munkafolyamatot, amivel az értékesítéseket tudom nyomon követni (leadtől a megnyertig)')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Telepíts egy új munkafolyamatot, amivel az értékesítéseket tudom nyomon követni (leadtől a megnyertig)&rdquo;</span><span class="prompt-copy"><svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg></span></div>
+
+      
+      <div class="sec-banner" id="skills-banner" onclick="toggleSection('skills')">
+        <div class="sec-header">
+          <span class="tc-icon">🧠</span>
+          <h2 class="sec-title">AI Skillek / MCP Promptok</h2>
+          <span class="sec-chevron" id="skills-chevron">▶</span>
+        </div>
+      </div>
+      
+      <div class="sec-content" id="skills-content" style="display:none;">
+        <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1.5rem; flex-wrap:wrap; margin: 1rem 0;">
+          <p style="margin:0; font-size:0.85rem; color:var(--text-muted); line-height:1.4; max-width:600px;">A 8 fő eszerződés munkafolyamat be van építve a szerverbe mint <strong>MCP Prompt</strong>, de külső plugin-ként is bekerülhetnek a Claude Desktop kliensedbe. Kattints a lenti "1-klikk telepítés" gombra, illeszd be a Terminálba, aminek a hatására létrejön a letöltött skillekkel egy <code class="inline-code">Eszerzodes-AI-Plugin</code> mappa a Mac Asztalodon (Desktop). Végül nyisd meg a Claude appban a <strong>Customize -> Skills -> Personal plugins [+]</strong> menüt és válaszd ki ezt a mappát!</p>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items: stretch;">
+            <button class="skill-banner-btn" onclick="copyInstallCmd(this)" style="background:var(--bg-subtle); color:var(--text); border:1px solid rgba(88,166,255,0.4); cursor:pointer; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">💻 1-klikk letöltés az Asztalra (Terminal)</button>
+            <a class="skill-banner-btn" href="/api/download-skills" style="background:var(--blue); color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">📥 Letöltés (.zip)</a>
+          </div>
+        </div>
+        <div id="skills-container"></div>
+      </div>
+
+      <!-- 💬 Prompt Galéria -->
+      <div class="sec-banner" id="gallery-banner" onclick="toggleSection('gallery')">
+        <div class="sec-header">
+          <span class="tc-icon">💬</span>
+          <h2 class="sec-title">Próbáld ki — Prompt Galéria</h2>
+          <span class="sec-chevron" id="gallery-chevron">▶</span>
+        </div>
+      </div>
+
+      <div class="sec-content" id="gallery-content" style="display: none;">
+        <p class="sec-desc-inline">Kattints egy sorra a prompt másolásához, majd illeszd be a Claude Desktopba!</p>
+        <div class="prompt-gallery">
+        <!-- 1. Lekérdezés -->
+        <div class="prompt-cat">
+          <div class="pc-header">🔍 Dashboard & Statisztika</div>
+          <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Listázd ki az összes aktív szerződést')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Listázd az aktív szerződéseket&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Készíts riportot: státusz megoszlás, lejárók, top partnerek')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Készíts teljes riportot&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Mi a Kovács Kft. szerződéseinek státusza?')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Partner-specifikus lekérdezés&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Melyik sablont használtam a legtöbbször az elmúlt 3 hónapban?')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon használati statisztika&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Ki a legaktívabb partnerem a szerződések száma alapján?')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Legaktívabb partnerek listája&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Mutasd a 2025-ös évi összes aláírt szerződésem listáját havi bontásban!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Éves szerződés-áttekintés&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Mekkora a jelenlegi várólistám? Hány partner nem írta még alá a kiküldött meghívókat?')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Várakozási lista és kitöltési arány&rdquo;</span></div>
+          </div>
+        </div>
+
+        <!-- 2. Műveletek -->
+        <div class="prompt-cat">
+          <div class="pc-header">✍️ Szerződéskezelés</div>
+          <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Hozz létre egy NDA-t a Teszt Kft.-nek')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Új NDA létrehozása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Keresd meg a bérleti sablont és küldj meghívót')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon keresés & Meghívó&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Vegyél fel egy új munkatársat, kérd be az e-mail címét, a jogkörét és az aláírási jogot')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatárs meghívása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Töltsd fel ezt a PDF-et, és készíts belőle egy új szerződést a minta.pdf néven!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Új szerződés PDF feltöltéssel&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Módosítsd a \'Mérnöki szerződés\' sablonban a \'Díj\' mező alapértelmezett értékét 150.000 Ft-ra!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon mező alapérték módosítás&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Archiváld az összes olyan sablont, amit több mint egy éve nem használtunk!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon-tárhely karbantartás&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Vegyél fel egy új \'Bérbeadó\' típusú partnert minden szükséges adattal (cím, adószám, képviselő)!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Komplett partner regisztráció&rdquo;</span></div>
+          </div>
+        </div>
+
+        <!-- 3. Automáció -->
+        <div class="prompt-cat">
+          <div class="pc-header">🤖 Automáció <span class="pc-badge auto">Szerver-oldali</span></div>
+          <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Figyeld a függő szerződéseimet: ha találsz olyat, ami több mint 5 napja vár aláírásra, küldj automatikus emlékeztetőt és készíts róla egy táblázatos jelentést')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Aláírás figyelés & Emlékeztető&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Nézd át az aláírásra váró szerződéseimet, amik legalább 7 napja stagnálnak, és frissítsd a státuszukat sürgősre')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Automatikus státusz-frissítés&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Telepíts egy új munkafolyamatot, amivel az értékesítéseket tudom nyomon követni (leadtől a megnyertig)')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkafolyamat (CRM) telepítés&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Minden hétfőn reggel nézd át the 7 napnál régebbi várakozó szerződéseimet és küldj nekem egy listát róluk!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Ütemezett hétfői ellenőrzés&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Ha egy szerződés lejárata 14 napon belül van, automatikusan állítsd a belső státuszát \'Megújítás alatt\'-ra!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Automata lejárati eszkaláció&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Figyeld az elutasított szerződéseket: ha egy partner elutasítja, jegyezd fel és értesíts azonnal!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Elutasítás-figyelő rendszer&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Készíts egy automata munkafolyamatot, ami új partner regisztrációjakor azonnal kiküld egy \'Üdvözlő NDA\' sablont!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Automata Üdvözlő-NDA workflow&rdquo;</span></div>
+          </div>
+        </div>
+
+        <!-- 4. Pro Workflows -->
+        <div class="prompt-cat" style="border-color: rgba(210, 153, 34, 0.4);">
+          <div class="pc-header">🚀 Pro Munkafolyamatok <span class="pc-badge pro">Advanced</span></div>
+          <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('PRO SZINT: Keresd meg a legrégebbi aláíratlan szerződésemet, hasonlítsd össze a sablonjával, hogy minden mező ki van-e töltve, töltsd le a PDF változatát és foglald össze nekem 3 pontban, miért akadhatott el a folyamat a partner adatai alapján!')"><span class="prompt-icon">🔥</span><span class="prompt-text" style="color:var(--blue); font-weight:600;">&ldquo;Teljes folyamat-diagnosztika&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Ha érkezik egy új aláírt szerződésem, töltsd le, vonj ki belőle minden fontos dátumot az ai_extract segítségével, és készíts róluk egy emlékeztető listát')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Adatkinyerés signed PDF-ből&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Hasonlítsd össze a Bérleti szerződés és az NDA sablonjaimat: melyek az átfedő változók, és melyiknél kell több adatot bekérni a partnertől?')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon összehasonlítás&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Elemezd az összes \'Bérleti\' típusú szerződésem: van benne olyan, aminek a lejárata után nem kötöttük meg az újat?')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Bérleti folytonosság audit&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Vedd a legutóbbi 5 aláírt szerződésem, töltsd le őket, és készíts egy összevont Excel-szerű riportot a bennük szereplő összegekről!')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Multi-file pénzügyi extrakció&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Ha egy partner adataiban változás történik az ai_extract alapján (pld. új cím a PDF-ben), frissítsd a partner adatait a rendszerben is!')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Intelligens partner-adat frissítés&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Hasonlítsd össze a cégem összes élő szerződését: hol vannak a legnagyobb kockázatok a lejárati dátumok és a kifizetési határidők alapján?')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Globális kockázati elemzés&rdquo;</span></div>
+          </div>
+        </div>
+
+        <!-- 5. Csapatkezelés -->
+        <div class="prompt-cat">
+          <div class="pc-header">👥 Csapat & Munkatársak</div>
+          <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Listázd ki a munkatársaimat és mutasd meg kinek van aláírási joga')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatársi lista & Jogkörök&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Vegyél fel egy új munkatársat: varga.janos@teszt.hu, adj neki szerkesztő jogkört és engedélyezd az aláírást!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Új munkatárs hozzáadása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Vond vissza kovacs.bela@teszt.hu minden hozzáférését, távolítsd el a fiókból!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatárs eltávolítása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Listázd ki azokat a munkatársakat, akik admin jogkörrel rendelkeznek!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Admin jogosultságok ellenőrzése&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Módosítsd szabo.anna@teszt.hu jogkörét nézőre és vond meg az aláírási jogát!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Jogkör módosítása&rdquo;</span></div>
+          </div>
+        </div>
+      </div>
+
 
     </div>
+
+<!-- 🏗️ Iparági Munkafolyamatok -->
+      <div class="sec-banner" id="workflows-banner" onclick="toggleSection('workflows')">
+        <div class="sec-header">
+          <span class="tc-icon">🏗️</span>
+          <h2 class="sec-title">Iparági Munkafolyamat Kezdőkészletek</h2>
+          <span class="sec-chevron" id="workflows-chevron">▶</span>
+        </div>
+      </div>
+
+      <div class="sec-content" id="workflows-content" style="display: none;">
+        <p class="sec-desc-inline">Válassz egyet, és az AI felépíti neked a komplett fázisokat, kikeresi a sablonokat és automatizálja a folyamatodat.</p>
+        <div class="wf-grid">
+        <!-- HR -->
+        <div class="wf-card" onclick="copyText('Telepíts egy komplett HR folyamatot az alábbi státuszokkal és színekkel: 1. Jelölt jelentkezése (#8b949e), 2. Interjú / Kiválasztás (#f0883e), 3. Bér ajánlat kiküldve (#f0883e), 4. Munkaszerződés aláírása (#d29922), 5. IT & Eszköz Onboarding (#d29922), 6. Aktív / Állományban (#3fb950). Keress Munkaszerződés sablont és mutasd meg hogyan automatizálhatjuk az értesítéseket!')">
+          <div class="wf-icon">👥</div>
+          <h3 class="wf-title">HR & Toborzás</h3>
+          <p class="wf-desc">A jelölt felkutatásától a teljes beléptetésig tartó automatizált lánc.</p>
+          <div class="wf-steps">
+            <span class="wf-step wf-s-1">Jelölt jelentkezése</span>
+            <span class="wf-step wf-s-2">Interjú / Kiválasztás</span>
+            <span class="wf-step wf-s-3">Bér ajánlat kiküldve</span>
+            <span class="wf-step wf-s-4">Munkaszerződés aláírása</span>
+            <span class="wf-step wf-s-5">IT & Eszköz Onboarding</span>
+            <span class="wf-step wf-s-6">Aktív / Állományban</span>
+          </div>
+          <button class="wf-btn">🚀 Munkafolyamat Telepítése</button>
+        </div>
+
+        <!-- Real Estate -->
+        <div class="wf-card" onclick="copyText('Építs fel egy Ingatlan kiadási folyamatot az alábbi színekkel: 1. Új érdeklődő (#8b949e), 2. Helyszíni megtekintés (#f0883e), 3. Foglaló / Kaució (#f0883e), 4. Bérleti szerződés (#d29922), 5. Jegyzőkönyv & Kulcsátadás (#d29922), 6. Szerződés lezárva (#3fb950). Keress Lakásbérleti sablont és állíts be automata lejárati figyelőt!')">
+          <div class="wf-icon">🏠</div>
+          <h3 class="wf-title">Ingatlankezelés</h3>
+          <p class="wf-desc">Bérleti szerződések és lakáskiadás teljes életciklusának menedzselése.</p>
+          <div class="wf-steps">
+            <span class="wf-step wf-s-1">Új érdeklődő</span>
+            <span class="wf-step wf-s-2">Helyszíni megtekintés</span>
+            <span class="wf-step wf-s-3">Foglaló / Kaució</span>
+            <span class="wf-step wf-s-4">Bérleti szerződés</span>
+            <span class="wf-step wf-s-5">Jegyzőkönyv & Kulcsátadás</span>
+            <span class="wf-step wf-s-6">Szerződés lezárva</span>
+          </div>
+          <button class="wf-btn">🚀 Munkafolyamat Telepítése</button>
+        </div>
+
+        <!-- Legal -->
+        <div class="wf-card" onclick="copyText('Telepíts egy Jogi Approval láncot: 1. Tervezet (#8b949e), 2. Jogi osztály elolvasta (#f0883e), 3. Pénzügyi keret engedély (#f0883e), 4. Partner jognyilatkozatai (#d29922), 5. Ügyvezetői aláírás (#d29922), 6. Archivált / Auditált (#3fb950). Mutasd meg az elutasítások kezelését is!')">
+          <div class="wf-icon">⚖️</div>
+          <h3 class="wf-title">Jogi & Compliance</h3>
+          <p class="wf-desc">Szigorú, többszintű jóváhagyási folyamatok és jogi ellenőrzési pontok.</p>
+          <div class="wf-steps">
+            <span class="wf-step wf-s-1">Tervezet elkészítése</span>
+            <span class="wf-step wf-s-2">Jogi osztály elolvasta</span>
+            <span class="wf-step wf-s-3">Pénzügyi keret engedély</span>
+            <span class="wf-step wf-s-4">Partner jognyilatkozatai</span>
+            <span class="wf-step wf-s-5">Ügyvezetői aláírás</span>
+            <span class="wf-step wf-s-6">Archivált / Auditált</span>
+          </div>
+          <button class="wf-btn">🚀 Munkafolyamat Telepítése</button>
+        </div>
+
+        <!-- Sales -->
+        <div class="wf-card" onclick="copyText('Hozz létre egy Sales pipe-ot: 1. Beérkező érdeklődés (#8b949e), 2. Igényfelmérés & Demo (#f0883e), 3. Ártárgyalás (#f0883e), 4. Testreszabott árajánlat (#d29922), 5. Elektronikus aláírás (#d29922), 6. Megnyert üzlet 🎉 (#3fb950). Keress NDA sablont!')">
+          <div class="wf-icon">💼</div>
+          <h3 class="wf-title">Sales & CRM</h3>
+          <p class="wf-desc">Értékesítési tölcsér összekötése az azonnali elektronikus szerződéskötéssel.</p>
+          <div class="wf-steps">
+            <span class="wf-step wf-s-1">Beérkező érdeklődés</span>
+            <span class="wf-step wf-s-2">Igényfelmérés & Demo</span>
+            <span class="wf-step wf-s-3">Ártárgyalás</span>
+            <span class="wf-step wf-s-4">Testreszabott árajánlat</span>
+            <span class="wf-step wf-s-5">Elektronikus aláírás</span>
+            <span class="wf-step wf-s-6">Megnyert üzlet 🎉</span>
+          </div>
+          <button class="wf-btn">🚀 Munkafolyamat Telepítése</button>
+        </div>
+
+        <!-- Finance -->
+        <div class="wf-card" onclick="copyText('Építs fel egy Pénzügyi folyamatot: 1. Belső igény jelzése (#8b949e), 2. 3-ajánlatos versenyeztetés (#f0883e), 3. Szállító validálása (#f0883e), 4. Költséghelyi engedély (#d29922), 5. Keretszerződés kötése (#d29922), 6. Számlázott & Fizetve (#3fb950).')">
+          <div class="wf-icon">💰</div>
+          <h3 class="wf-title">Pénzügy & Beszerzés</h3>
+          <p class="wf-desc">Vállalati beszerzések és kifizetési láncok transzparens nyomon követése.</p>
+          <div class="wf-steps">
+            <span class="wf-step wf-s-1">Belső igény jelzése</span>
+            <span class="wf-step wf-s-2">3-ajánlatos versenyeztetés</span>
+            <span class="wf-step wf-s-3">Szállító validálása</span>
+            <span class="wf-step wf-s-4">Költséghelyi engedély</span>
+            <span class="wf-step wf-s-5">Keretszerződés kötése</span>
+            <span class="wf-step wf-s-6">Számlázott & Fizetve</span>
+          </div>
+          <button class="wf-btn">🚀 Munkafolyamat Telepítése</button>
+        </div>
+
+        <!-- Logistics -->
+        <div class="wf-card" onclick="copyText('Telepíts egy Logisztikai folyamatot: 1. Szállítási igény (#8b949e), 2. Kapacitás allokáció (#f0883e), 3. Szerződés & Fuvarlevél (#f0883e), 4. Folyamatban lévő út (#d29922), 5. Áruátvétel igazolása (#d29922), 6. Lezárt / Kiszámlázott (#3fb950).')">
+          <div class="wf-icon">🚛</div>
+          <h3 class="wf-title">Logisztika & Flotta</h3>
+          <p class="wf-desc">Fuvarozási, szállítási és flottakezelési szerződések operatív lánca.</p>
+          <div class="wf-steps">
+            <span class="wf-step wf-s-1">Szállítási igény</span>
+            <span class="wf-step wf-s-2">Kapacitás allokáció</span>
+            <span class="wf-step wf-s-3">Szerződés & Fuvarlevél</span>
+            <span class="wf-step wf-s-4">Folyamatban lévő út</span>
+            <span class="wf-step wf-s-5">Áruátvétel igazolása</span>
+            <span class="wf-step wf-s-6">Lezárt / Kiszámlázott</span>
+          </div>
+          <button class="wf-btn">🚀 Munkafolyamat Telepítése</button>
+        </div>
+      </div>
+
+
   </div>
+
+  
 
   <footer>
     <p>&copy; 2025 Eszerződés.hu &mdash; <a href="https://www.eszerzodes.hu">www.eszerzodes.hu</a></p>
@@ -531,22 +717,23 @@ function copyInstallCmd(btn) {
   });
 }
 
-function toggleSkills() {
-  const content = document.getElementById('skills-content');
-  const chevron = document.getElementById('skills-chevron');
-  const banner = document.getElementById('skillek-banner');
-  const isHidden = content.style.display === 'none';
+function toggleSection(sid, forceOpen) {
+  const banner = document.getElementById(sid + '-banner');
+  const content = document.getElementById(sid + '-content');
+  const isOpen = banner.classList.contains('open');
   
-  if (isHidden) {
+  if (forceOpen) {
+    banner.classList.add('open');
     content.style.display = 'block';
-    chevron.style.transform = 'rotate(90deg)';
-    banner.style.background = 'rgba(88,166,255,0.08)';
-    banner.style.borderColor = 'rgba(88,166,255,0.4)';
-  } else {
+    return;
+  }
+
+  if (isOpen) {
+    banner.classList.remove('open');
     content.style.display = 'none';
-    chevron.style.transform = 'rotate(0deg)';
-    banner.style.background = 'rgba(88,166,255,0.05)';
-    banner.style.borderColor = 'rgba(48,54,61,0.8)';
+  } else {
+    banner.classList.add('open');
+    content.style.display = 'block';
   }
 }
 
