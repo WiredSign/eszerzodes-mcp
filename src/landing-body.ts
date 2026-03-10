@@ -40,7 +40,7 @@ export const BODY = `
     </a>
     <a href="#eszkozok" class="tab-nav-item" style="text-decoration:none">
       <svg viewBox="0 0 16 16"><path d="M11 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM9.5 3a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM4.5 9a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-1.5 1a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Zm6-3.5a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-1.5 1a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM5 3a1 1 0 1 0 0 2 1 1 0 0 0 0-2ZM3.5 4a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0ZM11 13a1 1 0 1 0 0 2 1 1 0 0 0 0-2Zm-1.5 1a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0Z"/></svg>
-      44 eszköz
+      49 eszköz
     </a>
     <a href="#gallery-banner" class="tab-nav-item" onclick="toggleSection('gallery', true)" style="text-decoration:none">
       <svg viewBox="0 0 16 16"><path d="M8 1a7 7 0 0 1 5.378 11.488l2.368 2.368a.751.751 0 0 1-.018 1.042.751.751 0 0 1-1.042.018l-2.368-2.368A7 7 0 1 1 8 1Zm0 12.5a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11Z"/></svg>
@@ -72,7 +72,7 @@ export const BODY = `
   <div class="stats-bar">
     <div class="stat-item"><div class="stat-dot" style="background:var(--blue)"></div> TypeScript</div>
     <div class="stat-item"><svg viewBox="0 0 16 16"><path d="M8 9.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z"/><path d="M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Z"/></svg> MIT License</div>
-    <div class="stat-item"><svg viewBox="0 0 16 16"><path d="M11.93 8.5a4.002 4.002 0 0 1-7.86 0H.75a.75.75 0 0 1 0-1.5h3.32a4.002 4.002 0 0 1 7.86 0h3.32a.75.75 0 0 1 0 1.5Zm-1.43-.75a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"/></svg> 44 tools</div>
+    <div class="stat-item"><svg viewBox="0 0 16 16"><path d="M11.93 8.5a4.002 4.002 0 0 1-7.86 0H.75a.75.75 0 0 1 0-1.5h3.32a4.002 4.002 0 0 1 7.86 0h3.32a.75.75 0 0 1 0 1.5Zm-1.43-.75a2.5 2.5 0 1 0-5 0 2.5 2.5 0 0 0 5 0Z"/></svg> 49 tools</div>
     <div class="stat-item"><svg viewBox="0 0 16 16"><path d="M2 2.5A2.5 2.5 0 0 1 4.5 0h8.75a.75.75 0 0 1 .75.75v12.5a.75.75 0 0 1-.75.75h-2.5a.75.75 0 0 1 0-1.5h1.75v-2h-8a1 1 0 0 0-.714 1.7.75.75 0 1 1-1.072 1.05A2.495 2.495 0 0 1 2 11.5Zm10.5-1h-8a1 1 0 0 0-1 1v6.708A2.486 2.486 0 0 1 4.5 9h8Z"/></svg> v1.0.0</div>
   </div>
 
@@ -92,7 +92,7 @@ export const BODY = `
   <div class="file-browser">
     <div class="file-header">
       <div class="avatar">E</div>
-      <span class="msg">feat: initial MCP server release with 44 tools</span>
+      <span class="msg">feat: initial MCP server release with 49 tools</span>
       <span class="time">latest</span>
     </div>
     <div class="file-row">
@@ -330,7 +330,7 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
 
 
 
-      <h2 id="eszkozok" style="scroll-margin-top: 2rem;">🧰 48 elérhető eszköz</h2>
+      <h2 id="eszkozok" style="scroll-margin-top: 2rem;">🧰 49 elérhető eszköz</h2>
       <div class="tool-grid" style="grid-template-columns:1fr 1fr">
 
         <!-- Szerződés Lekérdezések -->
@@ -410,7 +410,7 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
 
         <!-- Munkatársak -->
         <div class="tool-card" onclick="toggleCard(this,event)">
-          <div class="tc-header"><span class="tc-icon">🧑‍💻</span><span class="tc-title">Társfiókok / Munkatársak</span><span class="tc-count">4</span><span class="tc-chevron">▶</span></div>
+          <div class="tc-header"><span class="tc-icon">🧑‍💻</span><span class="tc-title">Társfiókok / Munkatársak</span><span class="tc-count">5</span><span class="tc-chevron">▶</span></div>
           <div class="tc-desc">Munkatársak és saját profil adatok kezelése</div>
           <div class="tc-tools">
             <div class="tc-select-all"><label onclick="toggleAll(this,event)">Mind be/ki</label><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="toggleAll(this.closest('.tool-card'),event)"><span class="slider"></span></label></div>
@@ -418,6 +418,7 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
             <div class="tc-tool-row"><span class="tool-name">coworker_add</span><span class="tool-label">Munkatárs hozzáadása</span><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="tc-tool-row"><span class="tool-name">coworker_remove</span><span class="tool-label">Munkatárs eltávolítása</span><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked><span class="slider"></span></label></div>
             <div class="tc-tool-row"><span class="tool-name">user_info</span><span class="tool-label">Felhasználói adatok</span><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="tc-tool-row"><span class="tool-name">user_branding_update</span><span class="tool-label">Arculat beállítása</span><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked><span class="slider"></span></label></div>
           </div>
         </div>
 
@@ -509,6 +510,7 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
             <div class="prompt-row" onclick="copyText('Hozz létre egy NDA-t a Teszt Kft.-nek')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Új NDA létrehozása&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Keresd meg a bérleti sablont és küldj meghívót')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon keresés & Meghívó&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Vegyél fel egy új munkatársat, kérd be az e-mail címét, a jogkörét és az aláírási jogot')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatárs meghívása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Segíts beállítani az egyedi arculatomat: színek, logók, e-mail fejléc és egyedi szövegek.')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Egyedi branding beállítása&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Töltsd fel ezt a PDF-et, és készíts belőle egy új szerződést a minta.pdf néven!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Új szerződés PDF feltöltéssel&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Módosítsd a \'Mérnöki szerződés\' sablonban a \'Díj\' mező alapértelmezett értékét 150.000 Ft-ra!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon mező alapérték módosítás&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Archiváld az összes olyan sablont, amit több mint egy éve nem használtunk!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon-tárhely karbantartás&rdquo;</span></div>
@@ -516,7 +518,19 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
           </div>
         </div>
 
-        <!-- 3. Automáció -->
+        <!-- 3. Arculat & Branding -->
+        <div class="prompt-cat">
+          <div class="pc-header">🎨 Arculat & Branding</div>
+          <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Ennek a cégnek az arculati színeit, logóját és háttérképét állítsd be a levélsablonban: https://www.eszerzodes.hu')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Komplett arculat beállítása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Állítsd be a kísérőlevelet erre a tartalomra: Üdvözöljük! Kérjük, írja alá a mellékelt dokumentumot. Üdvözlettel: [Cégnév] Csapata')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Kísérőlevél szövegének módosítása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Használd a cégem színeit (főszín: #2b88d8) az Eszerződés felületén és az e-mail háttérben!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Színvilág testreszabása (HEX)&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Frissítsd a logómat erről az URL-ről: [URL] és kapcsold be a megjelenítését a szerződéseken!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Logó frissítése & Bekapcsolása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Állíts be egy elegáns háttérképet a szerződéseimnek és engedélyezd az egyedi stílust!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Prémium megjelenés aktiválása&rdquo;</span></div>
+          </div>
+        </div>
+
+        <!-- 4. Automáció -->
         <div class="prompt-cat">
           <div class="pc-header">🤖 Automáció <span class="pc-badge auto">Szerver-oldali</span></div>
           <div class="pc-body">
@@ -529,8 +543,8 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
             <div class="prompt-row" onclick="copyText('Készíts egy automata munkafolyamatot, ami új partner regisztrációjakor azonnal kiküld egy \'Üdvözlő NDA\' sablont!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Automata Üdvözlő-NDA workflow&rdquo;</span></div>
           </div>
         </div>
-
-        <!-- 4. Pro Workflows -->
+ 
+        <!-- 5. Pro Workflows -->
         <div class="prompt-cat" style="border-color: rgba(210, 153, 34, 0.4);">
           <div class="pc-header">🚀 Pro Munkafolyamatok <span class="pc-badge pro">Advanced</span></div>
           <div class="pc-body">
@@ -543,8 +557,8 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
             <div class="prompt-row" onclick="copyText('Hasonlítsd össze a cégem összes élő szerződését: hol vannak a legnagyobb kockázatok a lejárati dátumok és a kifizetési határidők alapján?')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Globális kockázati elemzés&rdquo;</span></div>
           </div>
         </div>
-
-        <!-- 5. Csapatkezelés -->
+ 
+        <!-- 6. Csapatkezelés -->
         <div class="prompt-cat">
           <div class="pc-header">👥 Csapat & Munkatársak</div>
           <div class="pc-body">

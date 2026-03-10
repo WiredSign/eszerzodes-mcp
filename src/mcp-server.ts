@@ -7,6 +7,7 @@ import {
   registerDocumentTools,
   registerThirdPartyTools,
   registerMonitoringTools,
+  registerUserTools,
 } from "./tools/index.js";
 import { registerPrompts } from "./prompts.js";
 
@@ -24,6 +25,7 @@ export function createMcpServer(eszerzodesToken: string): McpServer {
   registerDocumentTools(server, client);
   registerThirdPartyTools(server, client);
   registerMonitoringTools(server, client);
+  registerUserTools(server, client);
   registerPrompts(server);
 
   return server;
