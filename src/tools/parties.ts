@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { EszerzodesClient } from "../api-client.js";
+import { wrapToolHandler } from "./common.js";
 
 export function registerPartyTools(
   server: McpServer,
@@ -21,13 +22,12 @@ Returns an array of partner objects with id, name, email, phone, etc.`,
         .optional()
         .describe("Search term (name, email, or company name)"),
     },
-    async (params) => {
+    async (params) => wrapToolHandler(async () => {
       const queryParams: Record<string, string> = {};
       if (params.term) queryParams.term = params.term;
 
-      const result = await client.get("/agent/partners", queryParams);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+      return await client.get("/agent/partners", queryParams);
+    })
   );
 
   // ── party_search ───────────────────────────────────────────────────
@@ -44,12 +44,11 @@ Returns matching partner objects.`,
         .string()
         .describe("Search query (name, email, or company name)"),
     },
-    async (params) => {
-      const result = await client.get("/agent/partners", {
+    async (params) => wrapToolHandler(async () => {
+      return await client.get("/agent/partners", {
         term: params.query,
       });
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── party_contracts ────────────────────────────────────────────────
@@ -72,15 +71,14 @@ Returns a list of contracts where the partner appears, with optional status filt
         .optional()
         .describe("Optional status filter for the contracts"),
     },
-    async (params) => {
+    async (params) => wrapToolHandler(async () => {
       // Search contracts by partner name using the contracts list endpoint
       const queryParams: Record<string, string> = {
         search_query: params.partner_name,
       };
 
-      const result = await client.get("/agent/contracts", queryParams);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+      return await client.get("/agent/contracts", queryParams);
+    })
   );
 
   // ── coworker_list ──────────────────────────────────────────────────
@@ -93,10 +91,9 @@ to the contract management system.
 
 Returns an array of coworker objects with id, email, name, and position.`,
     {},
-    async () => {
-      const result = await client.get("/agent/coworkers");
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    async () => wrapToolHandler(async () => {
+      return await client.get("/agent/coworkers");
+    })
   );
 
   // ── coworker_add ───────────────────────────────────────────────────
@@ -119,17 +116,14 @@ Returns the result of the operation.`,
         .optional()
         .describe("Whether the coworker has signing rights in the account"),
     },
-    async (params) => {
-      // In a real scenario we might map string roles to specific internal integers or arrays
+    async (params) => wrapToolHandler(async () => {
       const payload: Record<string, any> = {
         email: params.email,
-        // Optional payload parameters
         ...(params.role && { role: params.role }),
         ...(params.can_sign !== undefined && { can_sign: params.can_sign })
       };
-      const result = await client.post("/agent/coworkers", payload);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+      return await client.post("/agent/coworkers", payload);
+    })
   );
 
   // ── coworker_remove ────────────────────────────────────────────────
@@ -145,12 +139,11 @@ Returns the result of the operation.`,
         .string()
         .describe("Email address of the coworker to remove"),
     },
-    async (params) => {
-      const result = await client.delete("/agent/coworkers", undefined, {
+    async (params) => wrapToolHandler(async () => {
+      return await client.delete("/agent/coworkers", undefined, {
         email: params.email,
       });
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── user_info ──────────────────────────────────────────────────────
@@ -163,9 +156,8 @@ or membership information.
 
 Returns user details including id, name, email, and membership info.`,
     {},
-    async () => {
-      const result = await client.get("/agent/user-info");
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    async () => wrapToolHandler(async () => {
+      return await client.get("/agent/user-info");
+    })
   );
 }

@@ -2,6 +2,7 @@ import express from "express";
 import { StreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/streamableHttp.js";
 import { createMcpServer } from "./mcp-server.js";
 import { validateMcpKey } from "./auth.js";
+import { EszerzodesClient } from "./api-client.js";
 import { landingPageHtml } from "./landing.js";
 import { EszerzodesError, AuthError } from "./errors.js";
 import AdmZip from "adm-zip";
@@ -55,8 +56,8 @@ app.get("/api/download-skills", (_req, res) => {
     // Path to the .claude directory in the project root
     const claudeDir = path.join(__dirname, "..", ".claude");
 
-    // Add the folder preserving the .claude folder structure
-    zip.addLocalFolder(claudeDir, ".claude");
+    // Add the folder preserving the .claude folder structure but renamed
+    zip.addLocalFolder(claudeDir, "Eszerzodes-AI-Plugin");
 
     const zipBuffer = zip.toBuffer();
 
@@ -72,6 +73,32 @@ app.get("/api/download-skills", (_req, res) => {
 // Health check endpoint
 app.get("/health", (_req, res) => {
   res.json({ status: "ok", service: "eszerzodes-mcp", version: "1.0.0" });
+});
+
+// Direct token check endpoint for the landing page
+app.post("/api/check-token", async (req, res) => {
+  try {
+    const { apiKey } = req.body;
+    if (!apiKey) return res.status(400).json({ error: "Missing API key" });
+
+    // Validate if it's a mapped key or a direct token
+    const token = await validateMcpKey(`Bearer ${apiKey}`);
+    const client = new EszerzodesClient(token);
+
+    // Call a simple endpoint (templates list) to verify connectivity
+    const templates = await client.get<{ data: any[] }>("/agent/templates");
+
+    res.json({
+      success: true,
+      message: "API kapcsolat sikeres!",
+      templateCount: templates?.data?.length || 0
+    });
+  } catch (error: any) {
+    res.status(error.httpStatus || 401).json({
+      success: false,
+      error: error.message || "Érvénytelen API kulcs vagy hálózati hiba"
+    });
+  }
 });
 
 // MCP endpoint – stateless, every request creates a new MCP session

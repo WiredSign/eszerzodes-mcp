@@ -7,6 +7,7 @@ const express_1 = __importDefault(require("express"));
 const streamableHttp_js_1 = require("@modelcontextprotocol/sdk/server/streamableHttp.js");
 const mcp_server_js_1 = require("./mcp-server.js");
 const auth_js_1 = require("./auth.js");
+const api_client_js_1 = require("./api-client.js");
 const landing_js_1 = require("./landing.js");
 const errors_js_1 = require("./errors.js");
 const adm_zip_1 = __importDefault(require("adm-zip"));
@@ -53,8 +54,8 @@ app.get("/api/download-skills", (_req, res) => {
         const zip = new adm_zip_1.default();
         // Path to the .claude directory in the project root
         const claudeDir = path_1.default.join(__dirname, "..", ".claude");
-        // Add the folder preserving the .claude folder structure
-        zip.addLocalFolder(claudeDir, ".claude");
+        // Add the folder preserving the .claude folder structure but renamed
+        zip.addLocalFolder(claudeDir, "Eszerzodes-AI-Plugin");
         const zipBuffer = zip.toBuffer();
         res.setHeader("Content-Type", "application/zip");
         res.setHeader("Content-Disposition", 'attachment; filename="eszerzodes-claude-skills.zip"');
@@ -68,6 +69,30 @@ app.get("/api/download-skills", (_req, res) => {
 // Health check endpoint
 app.get("/health", (_req, res) => {
     res.json({ status: "ok", service: "eszerzodes-mcp", version: "1.0.0" });
+});
+// Direct token check endpoint for the landing page
+app.post("/api/check-token", async (req, res) => {
+    try {
+        const { apiKey } = req.body;
+        if (!apiKey)
+            return res.status(400).json({ error: "Missing API key" });
+        // Validate if it's a mapped key or a direct token
+        const token = await (0, auth_js_1.validateMcpKey)(`Bearer ${apiKey}`);
+        const client = new api_client_js_1.EszerzodesClient(token);
+        // Call a simple endpoint (templates list) to verify connectivity
+        const templates = await client.get("/agent/templates");
+        res.json({
+            success: true,
+            message: "API kapcsolat sikeres!",
+            templateCount: templates?.data?.length || 0
+        });
+    }
+    catch (error) {
+        res.status(error.httpStatus || 401).json({
+            success: false,
+            error: error.message || "Érvénytelen API kulcs vagy hálózati hiba"
+        });
+    }
 });
 // MCP endpoint – stateless, every request creates a new MCP session
 app.post("/mcp", async (req, res) => {

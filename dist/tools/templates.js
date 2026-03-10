@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerTemplateTools = registerTemplateTools;
 const zod_1 = require("zod");
+const common_js_1 = require("./common.js");
 function registerTemplateTools(server, client) {
     // ── template_list ──────────────────────────────────────────────────
     server.tool("template_list", `Lists all available contract templates (both built-in and user-created).
@@ -9,10 +10,9 @@ function registerTemplateTools(server, client) {
 Use this when the user wants to see what contract templates are available,
 or needs to find a template ID before creating a contract.
 
-Returns an array of template objects with id, name, and language.`, {}, async () => {
-        const result = await client.get("/agent/templates");
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+Returns an array of template objects with id, name, and language.`, {}, async () => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.get("/agent/templates");
+    }));
     // ── template_get ───────────────────────────────────────────────────
     server.tool("template_get", `Gets the full schema/structure of a specific template.
 
@@ -23,10 +23,9 @@ Returns the template structure including head_for_contract and contract_variable
         template_id: zod_1.z
             .string()
             .describe("The template ID to retrieve"),
-    }, async (params) => {
-        const result = await client.get(`/agent/templates/${encodeURIComponent(params.template_id)}`);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.get(`/agent/templates/${encodeURIComponent(params.template_id)}`);
+    }));
     // ── template_get_fields ────────────────────────────────────────────
     server.tool("template_get_fields", `Lists all fields (variables) defined in a specific template.
 
@@ -37,10 +36,9 @@ Returns an array of field objects with id, title, name, field_type, and options.
         template_id: zod_1.z
             .string()
             .describe("The template ID to get fields for"),
-    }, async (params) => {
-        const result = await client.get(`/agent/templates/${encodeURIComponent(params.template_id)}/fields`);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.get(`/agent/templates/${encodeURIComponent(params.template_id)}/fields`);
+    }));
     // ── template_create ────────────────────────────────────────────────
     server.tool("template_create", `Creates a new contract template.
 
@@ -91,10 +89,9 @@ Returns the created template ID.`, {
             .string()
             .optional()
             .describe("Title for 4th party role"),
-    }, async (params) => {
-        const result = await client.post("/agent/templates", params);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.post("/agent/templates", params);
+    }));
     // ── template_update ────────────────────────────────────────────────
     server.tool("template_update", `Updates an existing contract template.
 
@@ -114,11 +111,10 @@ Returns the updated template.`, {
         allowed_user: zod_1.z.number().int().optional(),
         partner_3_title: zod_1.z.string().optional(),
         partner_4_title: zod_1.z.string().optional(),
-    }, async (params) => {
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
         const { template_id, ...body } = params;
-        const result = await client.put(`/agent/templates/${encodeURIComponent(template_id)}`, body);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+        return await client.put(`/agent/templates/${encodeURIComponent(template_id)}`, body);
+    }));
     // ── template_delete ────────────────────────────────────────────────
     server.tool("template_delete", `Deletes a contract template.
 
@@ -127,10 +123,9 @@ This action is irreversible.
 
 Returns a success confirmation.`, {
         template_id: zod_1.z.string().describe("The template ID to delete"),
-    }, async (params) => {
-        const result = await client.delete(`/agent/templates/${encodeURIComponent(params.template_id)}`);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.delete(`/agent/templates/${encodeURIComponent(params.template_id)}`);
+    }));
     // ── template_archive ───────────────────────────────────────────────
     server.tool("template_archive", `Archives or restores a contract template.
 
@@ -142,10 +137,9 @@ Returns a success confirmation.`, {
         archive: zod_1.z
             .boolean()
             .describe("true to archive, false to restore"),
-    }, async (params) => {
-        const result = await client.post(`/agent/templates/${encodeURIComponent(params.template_id)}/archive`, { archive: params.archive });
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.post(`/agent/templates/${encodeURIComponent(params.template_id)}/archive`, { archive: params.archive });
+    }));
     // ── template_add_field ─────────────────────────────────────────────
     server.tool("template_add_field", `Adds a new field (variable) to a template.
 
@@ -165,11 +159,10 @@ Returns the created field object.`, {
             .string()
             .optional()
             .describe("Options for select-type fields (comma-separated or JSON)"),
-    }, async (params) => {
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
         const { template_id, ...body } = params;
-        const result = await client.post(`/agent/templates/${encodeURIComponent(template_id)}/fields`, body);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+        return await client.post(`/agent/templates/${encodeURIComponent(template_id)}/fields`, body);
+    }));
     // ── template_update_field ──────────────────────────────────────────
     server.tool("template_update_field", `Updates an existing field in a template.
 
@@ -182,11 +175,10 @@ Returns the updated field object.`, {
         name: zod_1.z.string().optional(),
         field_type: zod_1.z.string().optional(),
         options: zod_1.z.string().optional(),
-    }, async (params) => {
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
         const { template_id, field_id, ...body } = params;
-        const result = await client.put(`/agent/templates/${encodeURIComponent(template_id)}/fields/${field_id}`, body);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+        return await client.put(`/agent/templates/${encodeURIComponent(template_id)}/fields/${field_id}`, body);
+    }));
     // ── template_delete_field ──────────────────────────────────────────
     server.tool("template_delete_field", `Deletes a field from a template.
 
@@ -195,10 +187,9 @@ Use this when the user wants to remove a variable/field from a template.
 Returns a success confirmation.`, {
         template_id: zod_1.z.string().describe("The template ID"),
         field_id: zod_1.z.number().int().describe("The field ID to delete"),
-    }, async (params) => {
-        const result = await client.delete(`/agent/templates/${encodeURIComponent(params.template_id)}/fields/${params.field_id}`);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.delete(`/agent/templates/${encodeURIComponent(params.template_id)}/fields/${params.field_id}`);
+    }));
     // ── template_reorder_fields ────────────────────────────────────────
     server.tool("template_reorder_fields", `Reorders the fields within a template.
 
@@ -210,9 +201,8 @@ Returns a success confirmation.`, {
         field_ids: zod_1.z
             .array(zod_1.z.number().int())
             .describe("Array of field IDs in the desired order"),
-    }, async (params) => {
-        const result = await client.post(`/agent/templates/${encodeURIComponent(params.template_id)}/reorder-fields`, { field_ids: params.field_ids });
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.post(`/agent/templates/${encodeURIComponent(params.template_id)}/reorder-fields`, { field_ids: params.field_ids });
+    }));
 }
 //# sourceMappingURL=templates.js.map

@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.registerContractTools = registerContractTools;
 const zod_1 = require("zod");
+const common_js_1 = require("./common.js");
 function registerContractTools(server, client) {
     // ── contract_list ──────────────────────────────────────────────────
     server.tool("contract_list", `Lists contracts with optional filtering and pagination.
@@ -33,7 +34,7 @@ Returns a paginated list of contracts with metadata (current_page, last_page, to
             .string()
             .optional()
             .describe("Filter by finalization date (YYYY-MM-DD)"),
-    }, async (params) => {
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
         const queryParams = {};
         if (params.page !== undefined)
             queryParams.page = String(params.page);
@@ -45,9 +46,8 @@ Returns a paginated list of contracts with metadata (current_page, last_page, to
             queryParams.contract_creator = String(params.contract_creator);
         if (params.finalized_at)
             queryParams.finalized_at = params.finalized_at;
-        const result = await client.get("/agent/contracts", queryParams);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+        return await client.get("/agent/contracts", queryParams);
+    }));
     // ── contract_get ───────────────────────────────────────────────────
     server.tool("contract_get", `Retrieves full details of a single contract by its ID.
 
@@ -59,10 +59,9 @@ Returns the complete contract object including all associated data.`, {
             .number()
             .int()
             .describe("The contract ID to retrieve"),
-    }, async (params) => {
-        const result = await client.get(`/agent/contracts/${params.contract_id}`);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.get(`/agent/contracts/${params.contract_id}`);
+    }));
     // ── contract_get_by_own_id ─────────────────────────────────────────
     server.tool("contract_get_by_own_id", `Retrieves full details of a single contract by its custom internal ID (own_id).
 
@@ -189,10 +188,9 @@ Returns the created contract object.`, {
         }))
             .optional()
             .describe("List of partners to invite"),
-    }, async (params) => {
-        const result = await client.post("/agent/contracts", params);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.post("/agent/contracts", params);
+    }));
     // ── contract_create_from_pdf ───────────────────────────────────────
     server.tool("contract_create_from_pdf", `Creates a new contract from a PDF file available at a remote URL.
 
@@ -244,10 +242,9 @@ Returns the created contract object.`, {
         callback_url: zod_1.z.string().optional(),
         redirect_url: zod_1.z.string().optional(),
         signer_count: zod_1.z.number().int().optional(),
-    }, async (params) => {
-        const result = await client.post("/agent/contracts/pdf", params);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.post("/agent/contracts/pdf", params);
+    }));
     // ── contract_create_from_html ──────────────────────────────────────
     server.tool("contract_create_from_html", `Creates a new contract from HTML content that is converted to PDF.
 
@@ -293,10 +290,9 @@ Returns the created contract object.`, {
         redirect_url: zod_1.z.string().optional(),
         copy_to_email: zod_1.z.string().optional(),
         signer_count: zod_1.z.number().int().optional(),
-    }, async (params) => {
-        const result = await client.post("/agent/contracts/html", params);
-        return { content: [{ type: "text", text: JSON.stringify(result, null, 2) }] };
-    });
+    }, async (params) => (0, common_js_1.wrapToolHandler)(async () => {
+        return await client.post("/agent/contracts/html", params);
+    }));
     // ── contract_search ────────────────────────────────────────────────
     server.tool("contract_search", `Searches contracts using a text query. Searches across subject, partner names, and other fields.
 

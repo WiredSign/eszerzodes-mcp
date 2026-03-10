@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { EszerzodesClient } from "../api-client.js";
+import { wrapToolHandler } from "./common.js";
 
 export function registerContractTools(
   server: McpServer,
@@ -40,7 +41,7 @@ Returns a paginated list of contracts with metadata (current_page, last_page, to
         .optional()
         .describe("Filter by finalization date (YYYY-MM-DD)"),
     },
-    async (params) => {
+    async (params) => wrapToolHandler(async () => {
       const queryParams: Record<string, string> = {};
       if (params.page !== undefined) queryParams.page = String(params.page);
       if (params.search_query) queryParams.search_query = params.search_query;
@@ -50,9 +51,8 @@ Returns a paginated list of contracts with metadata (current_page, last_page, to
         queryParams.contract_creator = String(params.contract_creator);
       if (params.finalized_at) queryParams.finalized_at = params.finalized_at;
 
-      const result = await client.get("/agent/contracts", queryParams);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+      return await client.get("/agent/contracts", queryParams);
+    })
   );
 
   // ── contract_get ───────────────────────────────────────────────────
@@ -70,10 +70,9 @@ Returns the complete contract object including all associated data.`,
         .int()
         .describe("The contract ID to retrieve"),
     },
-    async (params) => {
-      const result = await client.get(`/agent/contracts/${params.contract_id}`);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    async (params) => wrapToolHandler(async () => {
+      return await client.get(`/agent/contracts/${params.contract_id}`);
+    })
   );
 
   // ── contract_get_by_own_id ─────────────────────────────────────────
@@ -228,10 +227,9 @@ Returns the created contract object.`,
         .optional()
         .describe("List of partners to invite"),
     },
-    async (params) => {
-      const result = await client.post("/agent/contracts", params);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    async (params) => wrapToolHandler(async () => {
+      return await client.post("/agent/contracts", params);
+    })
   );
 
   // ── contract_create_from_pdf ───────────────────────────────────────
@@ -291,10 +289,9 @@ Returns the created contract object.`,
       redirect_url: z.string().optional(),
       signer_count: z.number().int().optional(),
     },
-    async (params) => {
-      const result = await client.post("/agent/contracts/pdf", params);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    async (params) => wrapToolHandler(async () => {
+      return await client.post("/agent/contracts/pdf", params);
+    })
   );
 
   // ── contract_create_from_html ──────────────────────────────────────
@@ -348,10 +345,9 @@ Returns the created contract object.`,
       copy_to_email: z.string().optional(),
       signer_count: z.number().int().optional(),
     },
-    async (params) => {
-      const result = await client.post("/agent/contracts/html", params);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    async (params) => wrapToolHandler(async () => {
+      return await client.post("/agent/contracts/html", params);
+    })
   );
 
   // ── contract_search ────────────────────────────────────────────────

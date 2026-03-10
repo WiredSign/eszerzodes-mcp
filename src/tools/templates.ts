@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
 import { EszerzodesClient } from "../api-client.js";
+import { wrapToolHandler } from "./common.js";
 
 export function registerTemplateTools(
   server: McpServer,
@@ -16,10 +17,9 @@ or needs to find a template ID before creating a contract.
 
 Returns an array of template objects with id, name, and language.`,
     {},
-    async () => {
-      const result = await client.get("/agent/templates");
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    async () => wrapToolHandler(async () => {
+      return await client.get("/agent/templates");
+    })
   );
 
   // ── template_get ───────────────────────────────────────────────────
@@ -36,12 +36,11 @@ Returns the template structure including head_for_contract and contract_variable
         .string()
         .describe("The template ID to retrieve"),
     },
-    async (params) => {
-      const result = await client.get(
+    async (params) => wrapToolHandler(async () => {
+      return await client.get(
         `/agent/templates/${encodeURIComponent(params.template_id)}`
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── template_get_fields ────────────────────────────────────────────
@@ -58,12 +57,11 @@ Returns an array of field objects with id, title, name, field_type, and options.
         .string()
         .describe("The template ID to get fields for"),
     },
-    async (params) => {
-      const result = await client.get(
+    async (params) => wrapToolHandler(async () => {
+      return await client.get(
         `/agent/templates/${encodeURIComponent(params.template_id)}/fields`
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── template_create ────────────────────────────────────────────────
@@ -120,10 +118,9 @@ Returns the created template ID.`,
         .optional()
         .describe("Title for 4th party role"),
     },
-    async (params) => {
-      const result = await client.post("/agent/templates", params);
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    async (params) => wrapToolHandler(async () => {
+      return await client.post("/agent/templates", params);
+    })
   );
 
   // ── template_update ────────────────────────────────────────────────
@@ -149,14 +146,13 @@ Returns the updated template.`,
       partner_3_title: z.string().optional(),
       partner_4_title: z.string().optional(),
     },
-    async (params) => {
+    async (params) => wrapToolHandler(async () => {
       const { template_id, ...body } = params;
-      const result = await client.put(
+      return await client.put(
         `/agent/templates/${encodeURIComponent(template_id)}`,
         body
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── template_delete ────────────────────────────────────────────────
@@ -171,12 +167,11 @@ Returns a success confirmation.`,
     {
       template_id: z.string().describe("The template ID to delete"),
     },
-    async (params) => {
-      const result = await client.delete(
+    async (params) => wrapToolHandler(async () => {
+      return await client.delete(
         `/agent/templates/${encodeURIComponent(params.template_id)}`
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── template_archive ───────────────────────────────────────────────
@@ -194,13 +189,12 @@ Returns a success confirmation.`,
         .boolean()
         .describe("true to archive, false to restore"),
     },
-    async (params) => {
-      const result = await client.post(
+    async (params) => wrapToolHandler(async () => {
+      return await client.post(
         `/agent/templates/${encodeURIComponent(params.template_id)}/archive`,
         { archive: params.archive }
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── template_add_field ─────────────────────────────────────────────
@@ -226,14 +220,13 @@ Returns the created field object.`,
         .optional()
         .describe("Options for select-type fields (comma-separated or JSON)"),
     },
-    async (params) => {
+    async (params) => wrapToolHandler(async () => {
       const { template_id, ...body } = params;
-      const result = await client.post(
+      return await client.post(
         `/agent/templates/${encodeURIComponent(template_id)}/fields`,
         body
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── template_update_field ──────────────────────────────────────────
@@ -252,14 +245,13 @@ Returns the updated field object.`,
       field_type: z.string().optional(),
       options: z.string().optional(),
     },
-    async (params) => {
+    async (params) => wrapToolHandler(async () => {
       const { template_id, field_id, ...body } = params;
-      const result = await client.put(
+      return await client.put(
         `/agent/templates/${encodeURIComponent(template_id)}/fields/${field_id}`,
         body
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── template_delete_field ──────────────────────────────────────────
@@ -274,12 +266,11 @@ Returns a success confirmation.`,
       template_id: z.string().describe("The template ID"),
       field_id: z.number().int().describe("The field ID to delete"),
     },
-    async (params) => {
-      const result = await client.delete(
+    async (params) => wrapToolHandler(async () => {
+      return await client.delete(
         `/agent/templates/${encodeURIComponent(params.template_id)}/fields/${params.field_id}`
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 
   // ── template_reorder_fields ────────────────────────────────────────
@@ -297,12 +288,11 @@ Returns a success confirmation.`,
         .array(z.number().int())
         .describe("Array of field IDs in the desired order"),
     },
-    async (params) => {
-      const result = await client.post(
+    async (params) => wrapToolHandler(async () => {
+      return await client.post(
         `/agent/templates/${encodeURIComponent(params.template_id)}/reorder-fields`,
         { field_ids: params.field_ids }
       );
-      return { content: [{ type: "text" as const, text: JSON.stringify(result, null, 2) }] };
-    }
+    })
   );
 }

@@ -155,6 +155,19 @@ exports.BODY = `
       </table>
 
       <h2 id="telepites" style="scroll-margin-top: 2rem;">🚀 Kezdő lépések</h2>
+      <div class="test-box">
+        <h3 style="margin:0; font-size:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; color:var(--text);">
+          <span>🔌 API Kapcsolat Tesztelése</span>
+          <a href="https://www.eszerzodes.hu/api-tokens" target="_blank" style="font-size:0.75rem; color:var(--blue); text-decoration:none; font-weight:400; display:flex; align-items:center; gap:0.2rem;">🔑 Új API kulcs generálása &rsaquo;</a>
+        </h3>
+        <p style="margin:0.5rem 0 0; font-size:0.85rem; color:var(--text-muted);">Ellenőrizd, hogy az API kulcsod érvényes-e és a szerver eléri-e az Eszerződés.hu-t.</p>
+        <div class="test-input-group">
+          <input type="password" id="test-api-key" class="test-input" placeholder="Illeszd be az API kulcsod (vagy MCP kulcsod)...">
+          <button onclick="checkConnection(this)" class="test-btn">Tesztelés Futatása</button>
+        </div>
+        <div id="test-result" class="test-result"></div>
+      </div>
+
       <div class="opt-toggle">
         <button class="opt-btn active" onclick="switchOpt('cloud')">☁️ Felhő (ajánlott)</button>
         <button class="opt-btn" onclick="switchOpt('self')">💻 Saját szerver</button>
@@ -318,19 +331,28 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
 }</code></pre></div>
       </div>
 
-      <div class="skills-banner" id="skillek" style="background:rgba(88,166,255,0.1); border:1px solid rgba(88,166,255,0.4); border-radius:8px; padding:1.2rem; margin:1.5rem 0; scroll-margin-top:2rem;">
-        <div style="display:flex; justify-content:space-between; align-items:center; gap:1rem; flex-wrap:wrap; margin-bottom:1rem;">
-          <div>
-            <h3 style="margin-top:0; margin-bottom:0.5rem; display:flex; align-items:center; gap:0.5rem; font-size:1.1rem; color:var(--text);">🧠 AI Skillek / MCP Promptok</h3>
-            <p style="margin:0; font-size:0.85rem; color:var(--text-muted); line-height:1.4; max-width:600px;">A 8 fő eszerződés munkafolyamat be van építve a szerverbe mint <strong>MCP Prompt</strong>, de ha a saját projekted könyvtárában dolgozol, le is töltheted a <code class="inline-code">.claude/skills</code> fájlokat és bemásolhatod őket magadhoz.</p>
-          </div>
-          <a href="/api/download-skills" style="background:var(--blue); color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">📥 Skillek letöltése (.zip)</a>
+      <div class="skills-banner collapsible" id="skillek-banner" style="background:rgba(88,166,255,0.05); border:1px solid rgba(48,54,61,0.8); border-radius:8px; margin:1.5rem 0; scroll-margin-top:2rem; transition: all 0.3s ease-out;">
+        <div onclick="toggleSkills()" style="display:flex; justify-content:space-between; align-items:center; padding:1.2rem; cursor:pointer; user-select:none;" onmouseover="this.style.background='rgba(88,166,255,0.03)'" onmouseout="this.style.background='transparent'">
+          <h3 style="margin:0; display:flex; align-items:center; gap:0.5rem; font-size:1.1rem; color:var(--text); flex:1;">
+            <span>🧠 AI Skillek / MCP Promptok</span>
+            <span id="skills-chevron" style="color:var(--text-subtle); transition: transform 0.3s; font-size: 0.8rem; margin-left: 0.5rem;">▶</span>
+          </h3>
+          <div id="skills-badge" style="background:rgba(88,166,255,0.1); color:var(--blue); padding:0.1rem 0.6rem; border-radius:2rem; font-size:0.75rem; font-weight:600;">8 munkafolyamat</div>
         </div>
         
-        <div id="skills-container"></div>
+        <div id="skills-content" style="display:none; padding: 0 1.2rem 1.2rem; border-top: 1px solid var(--border);">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1.5rem; flex-wrap:wrap; margin: 1rem 0;">
+            <p style="margin:0; font-size:0.85rem; color:var(--text-muted); line-height:1.4; max-width:600px;">A 8 fő eszerződés munkafolyamat be van építve a szerverbe mint <strong>MCP Prompt</strong>, de külső plugin-ként is bekerülhetnek a Claude Desktop kliensedbe. Kattints a lenti "1-klikk telepítés" gombra, illeszd be a Terminálba, aminek a hatására létrejön a letöltött skillekkel egy <code class="inline-code">Eszerzodes-AI-Plugin</code> mappa a Mac Asztalodon (Desktop). Végül nyisd meg a Claude appban a <strong>Customize -> Skills -> Personal plugins [+]</strong> menüt és válaszd ki ezt a mappát!</p>
+            <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items: stretch;">
+              <button class="skill-banner-btn" onclick="copyInstallCmd(this)" style="background:var(--bg-subtle); color:var(--text); border:1px solid rgba(88,166,255,0.4); cursor:pointer; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">💻 1-klikk letöltés az Asztalra (Terminal)</button>
+              <a class="skill-banner-btn" href="/api/download-skills" style="background:var(--blue); color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">📥 Letöltés (.zip)</a>
+            </div>
+          </div>
+          <div id="skills-container"></div>
+        </div>
       </div>
 
-      <h2 id="eszkozok" style="scroll-margin-top: 2rem;">🧰 44 elérhető eszköz</h2>
+      <h2 id="eszkozok" style="scroll-margin-top: 2rem;">🧰 47 elérhető eszköz</h2>
       <div class="tool-grid" style="grid-template-columns:1fr 1fr">
 
         <!-- Szerződés Lekérdezések -->
@@ -432,6 +454,27 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
           </div>
         </div>
 
+        <!-- Automáció & Monitoring -->
+        <div class="tool-card" onclick="toggleCard(this,event)">
+          <div class="tc-header"><span class="tc-icon">🤖</span><span class="tc-title">Automáció & Monitoring</span><span class="tc-count">1</span><span class="tc-chevron">▶</span></div>
+          <div class="tc-desc">Szerződés-figyelés és automatikus emlékeztetők küldése</div>
+          <div class="tc-tools">
+            <div class="tc-select-all"><label onclick="toggleAll(this,event)">Mind be/ki</label><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="toggleAll(this.closest('.tool-card'),event)"><span class="slider"></span></label></div>
+            <div class="tc-tool-row"><span class="tool-name">check_pending_signatures</span><span class="tool-label">Aláírás-figyelő és emlékeztető</span><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked><span class="slider"></span></label></div>
+          </div>
+        </div>
+
+        <!-- Külső Integráció -->
+        <div class="tool-card" onclick="toggleCard(this,event)">
+          <div class="tc-header"><span class="tc-icon">🔌</span><span class="tc-title">Külső Integráció (3rd Party)</span><span class="tc-count">2</span><span class="tc-chevron">▶</span></div>
+          <div class="tc-desc">Külső partnerek és sub-accountok távoli kezelése</div>
+          <div class="tc-tools">
+            <div class="tc-select-all"><label onclick="toggleAll(this,event)">Mind be/ki</label><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked onchange="toggleAll(this.closest('.tool-card'),event)"><span class="slider"></span></label></div>
+            <div class="tc-tool-row"><span class="tool-name">third_party_register</span><span class="tool-label">Új fiók regisztrálása</span><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked><span class="slider"></span></label></div>
+            <div class="tc-tool-row"><span class="tool-name">third_party_get_otp</span><span class="tool-label">Belépési link generálása</span><label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" checked><span class="slider"></span></label></div>
+          </div>
+        </div>
+
       </div>
 
       <h2 id="proba" style="scroll-margin-top: 2rem;">💬 Próbáld ki — kérdezd az AI-t</h2>
@@ -466,7 +509,7 @@ function openAIPrompt(platform) {
 }
 
 const COPY_ICON='<svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>';
-const CHECK_ICON='<svg viewBox="0 0 16 16"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>';
+const CHECK_ICON='<svg viewBox="0 0 16 16" width="14" height="14" style="flex-shrink:0"><path fill="currentColor" d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>';
 let toastTimer;
 
 function showToast(){
@@ -474,6 +517,82 @@ function showToast(){
   t.classList.add('show');
   clearTimeout(toastTimer);
   toastTimer=setTimeout(()=>t.classList.remove('show'),2000);
+}
+
+function copyInstallCmd(btn) {
+  const url = window.location.origin + "/api/download-skills";
+  const cmd = \`curl -sL "\${url}" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d ~/Desktop/ && rm /tmp/esz-skills.zip\`;
+  navigator.clipboard.writeText(cmd).then(()=>{
+    const old = btn.innerHTML;
+    btn.classList.add('btn-success');
+    btn.innerHTML = CHECK_ICON + ' Másolva!';
+    showToast();
+    setTimeout(()=>{
+      btn.innerHTML = old;
+      btn.classList.remove('btn-success');
+    }, 2000);
+  });
+}
+
+function toggleSkills() {
+  const content = document.getElementById('skills-content');
+  const chevron = document.getElementById('skills-chevron');
+  const banner = document.getElementById('skillek-banner');
+  const isHidden = content.style.display === 'none';
+  
+  if (isHidden) {
+    content.style.display = 'block';
+    chevron.style.transform = 'rotate(90deg)';
+    banner.style.background = 'rgba(88,166,255,0.08)';
+    banner.style.borderColor = 'rgba(88,166,255,0.4)';
+  } else {
+    content.style.display = 'none';
+    chevron.style.transform = 'rotate(0deg)';
+    banner.style.background = 'rgba(88,166,255,0.05)';
+    banner.style.borderColor = 'rgba(48,54,61,0.8)';
+  }
+}
+
+async function checkConnection(btn) {
+  const input = document.getElementById('test-api-key');
+  const result = document.getElementById('test-result');
+  const apiKey = input.value.trim();
+  
+  if (!apiKey) {
+    result.className = "test-result error";
+    result.innerHTML = '❌ Kérlek adj meg egy API kulcsot!';
+    return;
+  }
+  
+  const oldText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '⌛ Ellenőrzés...';
+  result.style.display = 'none';
+  
+  try {
+    const res = await fetch('/api/check-token', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ apiKey })
+    });
+    
+    const data = await res.json();
+    
+    if (data.success) {
+      result.className = "test-result success";
+      result.innerHTML = \`✅ <strong>Sikeres csatlakozás!</strong> Az API elérhető. (\${data.templateCount} sablon található)\`;
+    } else {
+      result.className = "test-result error";
+      result.innerHTML = \`❌ <strong>Hiba:</strong> \${data.error}\`;
+    }
+  } catch (err) {
+    result.className = "test-result error";
+    result.innerHTML = '❌ <strong>Hiba:</strong> Nem sikerült elérni az MCP szervert.';
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = oldText;
+    result.style.display = 'flex';
+  }
 }
 
 function copyText(text){
@@ -496,10 +615,13 @@ function copySkill(e, btn) {
   const pre = btn.closest('.skill-card').querySelector('pre');
   navigator.clipboard.writeText(pre.textContent).then(()=>{
     const old = btn.innerHTML;
+    btn.classList.add('btn-success');
     btn.innerHTML = '✅ Másolva';
-    btn.style.background = 'var(--bg)';
     showToast();
-    setTimeout(()=>{btn.innerHTML = old; btn.style.background = '';}, 2000);
+    setTimeout(()=>{
+      btn.innerHTML = old;
+      btn.classList.remove('btn-success');
+    }, 2000);
   });
 }
 

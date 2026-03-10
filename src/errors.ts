@@ -112,8 +112,14 @@ export function createApiError(
       return new ForbiddenError(`${prefix}: ${body}`);
     case 404:
       return new NotFoundError(`${prefix}: ${body}`);
-    case 422:
-      return new ValidationError(`${prefix}: ${body}`, validationErrors);
+    case 400:
+    case 422: {
+      const missingFields = validationErrors ? Object.keys(validationErrors).join(", ") : "";
+      const promptHint = missingFields
+        ? `\n\n[VISSZAKÉRDEZÉS SZÜKSÉGES / ACTION REQUIRED]: A művelet folytatásához hiányoznak a következő adatok: ${missingFields}. Kérlek, kérdezd meg ezeket a felhasználótól, majd próbáld meg újra a műveletet a kapott adatokkal!`
+        : "";
+      return new ValidationError(`${prefix}: ${body}${promptHint}`, validationErrors);
+    }
     case 429:
       return new RateLimitError(`${prefix}: ${body}`);
     default:
