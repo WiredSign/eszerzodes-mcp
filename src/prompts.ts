@@ -568,6 +568,7 @@ A \`user_branding_update\` tool hívása előtt ügyelj a következőkre:
 - **Címsorok kiemelő színe**: A \`contract_email_background_color\` paramétert használd címsorok kiemeléséhez. Figyelj a **kontrasztarányra**: a szín legyen minimum 50%-kal sötétebb (vagy sötét irányba megfelelő kontrasztú), ha a márkaszín túl világos, hogy az e-mailekben olvasható maradjon a szöveg.
 - **Képek**: Tájékoztass a korlátokról (Logó/Email fejléc: max 200KB, Háttér: max 300KB).
 - **Email szöveg**: Segíts megfogalmazni egy profi, az arculathoz illő alapértelmezett kísérőlevelet. (Max 5000 karakter).
+- **Jogosultságok**: Az arculat módosításához olyan Bearer tokenre van szükség, amely rendelkezik a "user:write" hatókörrel (scope). Ha a művelet jogosultsági hiba miatt meghiúsul, kérd meg a felhasználót, hogy generáljon egy új tokent ezzel a jogosultsággal a [https://www.eszerzodes.hu/api-tokens](https://www.eszerzodes.hu/api-tokens) oldalon.
 
 ## 5. Összegzés és Végrehajtás
 Mutass egy látványos összefoglalót a tervezett változásokról:
@@ -581,6 +582,35 @@ Mindig magyarul válaszolj, légy segítőkész és stílusos!`,
           },
         },
       ],
+    })
+  );
+
+  // ── api-token-segitseg ──────────────────────────────────────────────
+  server.prompt(
+    "api-token-segitseg",
+    `Segítség az API kulcs (Bearer token) beszerzéséhez. Használd ha a felhasználó nem találja vagy nem tudja hol kell generálni a tokent az Eszerződés.hu-n.`,
+    {},
+    () => ({
+      messages: [
+        {
+          role: "user" as const,
+          content: {
+            type: "text" as const,
+            text: `Hogyan tudok API kulcsot (Bearer tokent) szerezni az Eszerződés.hu fiókomhoz?
+            
+Az API token beszerzéséhez kövesd az alábbi lépéseket:
+1. Lépj be a fiókodba az [eszerzodes.hu](https://www.eszerzodes.hu) oldalon.
+2. Kattints a jobb felső sarokban a nevedre, majd válaszd a **Beállítások** menüpontot.
+3. A bal oldali menüben válaszd az **API** opciót.
+4. Közvetlen link: [https://www.eszerzodes.hu/api-tokens](https://www.eszerzodes.hu/api-tokens)
+5. Itt tudsz új "Személyes hozzáférési tokent" (Bearer token) generálni. 
+6. Adj neki egy nevet (pl. "Claude MCP"), és válaszd ki a szükséges jogosultságokat. 
+   - *Tipp: Ha az arculatot is szeretnéd AI-val módosítani, ne felejtsd el bejelölni a \`user:write\` jogosultságot!*
+   
+A generált tokent másold ki és használd az MCP szerver konfigurációjában.`
+          }
+        }
+      ]
     })
   );
 }

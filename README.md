@@ -40,7 +40,7 @@ docker compose up -d
 
 ### API kulcs konfigurálása
 
-A szerver az Eszerződés.hu API-val kommunikál a te nevedben. Ehhez szüksége van a Bearer tokenedre.
+A szerver az Eszerződés.hu API-val kommunikál a te nevedben. Ehhez szüksége van a Bearer tokenedre, amit az [eszerzodes.hu/api-tokens](https://www.eszerzodes.hu/api-tokens) oldalon (Beállítások → API menüben) tudsz generálni.
 
 **A) Közvetlen token használat (fejlesztéshez)**
 
@@ -68,9 +68,35 @@ Ezután a kliens az `ESZ_MCP_ugyfel1` kulcsot küldi, a szerver pedig leképezi 
 
 ## Csatlakozás AI eszközökből
 
-### Claude Desktop
+### ☁️ Felhő Relay (nincs szükség helyi szerverre)
 
-> **Előfeltétel:** Node.js telepítése szükséges (v18+). Ellenőrzés: `node --version` | Telepítés: [nodejs.org](https://nodejs.org)
+Ha nem akarod saját gépen futtatni a szervert, csatlakozhatsz közvetlenül a felhő relay szerverünkhöz.
+
+#### Claude Desktop
+Add hozzá a `claude_desktop_config.json` fájlhoz:
+
+```json
+{
+  "mcpServers": {
+    "eszerzodes": {
+      "type": "http",
+      "url": "https://api.eszerzodes.hu/mcp/mcp",
+      "headers": {
+        "Authorization": "Bearer <API_TOKENED>"
+      }
+    }
+  }
+}
+```
+
+#### Cursor / Windsurf / Cline
+Használd a következő végpontot: `https://api.eszerzodes.hu/mcp/mcp` az `Authorization` headerrel együtt.
+
+---
+
+### 💻 Saját szerver (Helyi futtatás)
+
+#### Claude Desktop
 
 Add hozzá a `claude_desktop_config.json` fájlhoz:
 
@@ -78,14 +104,11 @@ Add hozzá a `claude_desktop_config.json` fájlhoz:
 {
   "mcpServers": {
     "eszerzodes": {
-      "command": "npx",
-      "args": [
-        "-y",
-        "mcp-remote",
-        "http://localhost:3000/mcp",
-        "--header",
-        "Authorization: Bearer <API_TOKENED>"
-      ]
+      "type": "http",
+      "url": "http://localhost:3000/mcp",
+      "headers": {
+        "Authorization": "Bearer <API_TOKENED>"
+      }
     }
   }
 }
@@ -95,19 +118,16 @@ Add hozzá a `claude_desktop_config.json` fájlhoz:
 - macOS: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - Windows: `%APPDATA%\Claude\claude_desktop_config.json`
 
-> **Figyelem:** A `claude_desktop_config.json` fájlnak egyetlen JSON objektumnak kell lennie. Ha a fájl nem létezik, hozd létre. Ha már van benne tartalom (pl. `"preferences"`), az `"mcpServers"` részt ugyanabba az objektumba kell tenni vesszővel elválasztva.
-> Mentés után **teljesen zárd be** a Claude Desktop-ot (macOS: Cmd+Q, Windows: jobb klikk a tálcán → Kilépés), majd indítsd újra.
+> **Mentés után:** Teljesen zárd be a Claude Desktop-ot, majd indítsd újra.
 
-### Claude Code (CLI)
+#### Claude Code (CLI)
 
 ```bash
 claude mcp add eszerzodes --transport http http://localhost:3000/mcp \
   -H "Authorization: Bearer <API_TOKENED>"
 ```
 
-### Cursor
-
-A Cursor beállításokban add hozzá MCP szerverként:
+#### Cursor / Windsurf / Cline
 - **URL:** `http://localhost:3000/mcp`
 - **Header:** `Authorization: Bearer <API_TOKENED>`
 

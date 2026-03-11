@@ -85,13 +85,23 @@ app.post("/api/check-token", async (req, res) => {
     const token = await validateMcpKey(`Bearer ${apiKey}`);
     const client = new EszerzodesClient(token);
 
-    // Call a simple endpoint (templates list) to verify connectivity
-    const templates = await client.get<{ data: any[] }>("/agent/templates");
+    // Call user-info to get subscription details
+    const userInfo: any = await client.get("/agent/user-info");
+    // Support both root-level and { data: ... } responses
+    const d = userInfo?.data || userInfo || {};
+
+    const subInfo = {
+      package: d.membership || d.membership_name || "Nincs aktív csomag",
+      limit: d.total_capacity || 0,
+      used: d.used_capacity || 0,
+      expiry: d.membership_ends_at || d.membership_expires_at || "nincs megadva",
+      credits: d.credit !== undefined ? d.credit : (d.credits !== undefined ? d.credits : null)
+    };
 
     res.json({
       success: true,
       message: "API kapcsolat sikeres!",
-      templateCount: templates?.data?.length || 0
+      subscription: subInfo
     });
   } catch (error: any) {
     res.status(error.httpStatus || 401).json({

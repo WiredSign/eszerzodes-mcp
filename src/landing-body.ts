@@ -1,4 +1,101 @@
 export const BODY = `
+<!-- Node.js Modal -->
+<div class="modal-overlay" id="node-modal" onclick="if(event.target===this)closeNodeModal()">
+  <div class="modal-card" style="max-width: 600px;">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:1rem;color:var(--text)">Node.js telepítése — Claude Desktop előfeltétel</h3>
+      <button class="modal-close" onclick="closeNodeModal()">&times;</button>
+    </div>
+    <div class="modal-body">
+      <h2 style="font-size:1.1rem;margin-bottom:0.8rem;border:none">Fent van már a gépeden?</h2>
+      <p style="font-size:0.9rem;margin-bottom:0.6rem">Ezzel tudod a terminálban ellenőrizni:</p>
+      <div class="config-path-box" style="display:flex;justify-content:space-between;align-items:center">
+        <code>node --version</code>
+        <button class="btn-mini" onclick="copyText('node --version')">Másolás</button>
+      </div>
+      <p style="font-size:0.85rem;color:var(--text-muted);margin:0.8rem 0 1.5rem">Ha kapsz egy verziószámot (pl. <code>v20.11.0</code>), akkor kész vagy — <strong>bezárhatod ezt az ablakot</strong>.</p>
+      
+      <h2 style="font-size:1.1rem;margin-bottom:0.8rem;border:none;padding-top:1rem;border-top:1px solid var(--border)">Telepítési segédlet</h2>
+      
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+        <div>
+          <h4 style="color:var(--text);margin-bottom:0.5rem">🍏 macOS</h4>
+          <ol style="font-size:0.8rem;color:var(--text-muted);padding-left:1.1rem;line-height:1.5">
+            <li>Nyisd meg: <a href="https://nodejs.org" target="_blank" style="color:var(--blue)">nodejs.org</a></li>
+            <li>Válaszd az <strong>LTS</strong> verziót (ajánlott)</li>
+            <li>Futtasd a letöltött <code>.pkg</code> fájlt</li>
+            <li>Kattints végig a telepítőn (Next → Install)</li>
+          </ol>
+        </div>
+        <div>
+          <h4 style="color:var(--text);margin-bottom:0.5rem">🪟 Windows</h4>
+          <ol style="font-size:0.8rem;color:var(--text-muted);padding-left:1.1rem;line-height:1.5">
+            <li>Nyisd meg: <a href="https://nodejs.org" target="_blank" style="color:var(--blue)">nodejs.org</a></li>
+            <li>Válaszd az <strong>LTS</strong> verziót (ajánlott)</li>
+            <li>Futtasd a letöltött <code>.msi</code> fájlt</li>
+            <li>Kattints végig a telepítőn (Next → Install)</li>
+          </ol>
+        </div>
+      </div>
+      <p style="font-size:0.8rem;color:var(--text-subtle);margin-top:1.2rem;background:rgba(88,166,255,0.05);padding:0.75rem;border-radius:6px;border:1px solid rgba(88,166,255,0.1)">💡 <strong>Tipp:</strong> Telepítés után indítsd újra a Terminált / PowerShellt, hogy felismerje az új parancsot!</p>
+    </div>
+  </div>
+</div>
+
+<!-- Config Modal -->
+<div class="modal-overlay" id="config-modal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-card">
+    <div class="modal-header">
+      <h3 style="margin:0;font-size:1rem;color:var(--text)">Hol találom a konfigurációt?</h3>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-tabs">
+      <div class="modal-tab active" onclick="switchModalTab(this, 'm-mac')">macOS</div>
+      <div class="modal-tab" onclick="switchModalTab(this, 'm-win')">Windows</div>
+    </div>
+    <div class="modal-body">
+      <!-- Mac -->
+      <div id="m-mac" class="modal-pane active">
+        <p style="font-size:0.9rem;margin-bottom:0.8rem">macOS-en a fájl itt található:</p>
+        <div class="config-path-box">
+          ~/Library/Application Support/Claude/
+          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('~/Library/Application Support/Claude/')">Másolás</button>
+        </div>
+        <p style="font-size:0.85rem;margin-top:1rem;color:var(--text-muted)">A legegyszerűbb módja, hogy megtaláld:</p>
+        <ol style="font-size:0.85rem;color:var(--text-muted);padding-left:1.2rem;line-height:1.6">
+          <li>Nyisd meg a <strong>Finder</strong>-t.</li>
+          <li>Nyomd meg a <strong>Cmd + Shift + G</strong> billentyűkombinációt.</li>
+          <li>Másold be a fenti útvonalat és nyomj Enter-t.</li>
+          <li>Ha a <code style="color:var(--blue)">claude_desktop_config.json</code> nem létezik, hozd létre.</li>
+        </ol>
+        <p style="font-size:0.85rem;margin-top:1rem;color:var(--text-subtle)">Vagy használd ezt a parancsot a terminálban (létrehozza és megnyitja):</p>
+        <div class="config-path-box" style="font-size:0.75rem">
+          mkdir -p "$HOME/Library/Application Support/Claude" && touch "$HOME/Library/Application Support/Claude/claude_desktop_config.json" && open -e "$HOME/Library/Application Support/Claude/claude_desktop_config.json"
+          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('mkdir -p &quot;$HOME/Library/Application Support/Claude&quot; && touch &quot;$HOME/Library/Application Support/Claude/claude_desktop_config.json&quot; && open -e &quot;$HOME/Library/Application Support/Claude/claude_desktop_config.json&quot;')">Másolás</button>
+        </div>
+      </div>
+      <!-- Win -->
+      <div id="m-win" class="modal-pane">
+        <p style="font-size:0.9rem;margin-bottom:0.8rem">Windows-on a mappát így éred el:</p>
+        <div class="config-path-box">
+          %APPDATA%\Claude
+          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('%APPDATA%\\Claude')">Másolás</button>
+        </div>
+        <ol style="font-size:0.85rem;color:var(--text-muted);padding-left:1.2rem;line-height:1.6">
+          <li>Nyomd meg a <strong>Win + R</strong> billentyűkombinációt.</li>
+          <li>Másold be a fenti útvonalat és nyomj Enter-t.</li>
+          <li>Itt találod (vagy hozd létre) a <code style="color:var(--blue)">claude_desktop_config.json</code> fájlt.</li>
+        </ol>
+        <p style="font-size:0.85rem;margin-top:1rem;color:var(--text-subtle)">Vagy használd ezt a parancsot PowerShellben:</p>
+        <div class="config-path-box" style="font-size:0.75rem">
+          if (!(Test-Path "$env:APPDATA\Claude")) { New-Item -ItemType Directory -Path "$env:APPDATA\Claude" }; if (!(Test-Path "$env:APPDATA\Claude\claude_desktop_config.json")) { New-Item -ItemType File -Path "$env:APPDATA\Claude\claude_desktop_config.json" }; notepad "$env:APPDATA\Claude\claude_desktop_config.json"
+          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('if (!(Test-Path &quot;$env:APPDATA\\Claude&quot;)) { New-Item -ItemType Directory -Path &quot;$env:APPDATA\\Claude&quot; }; if (!(Test-Path &quot;$env:APPDATA\\Claude\\claude_desktop_config.json&quot;)) { New-Item -ItemType File -Path &quot;$env:APPDATA\\Claude\\claude_desktop_config.json&quot; }; notepad &quot;$env:APPDATA\\Claude\\claude_desktop_config.json&quot;')">Másolás</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Toast notification -->
 <div class="toast" id="copy-toast">
   <svg viewBox="0 0 16 16"><path d="M13.78 4.22a.75.75 0 0 1 0 1.06l-7.25 7.25a.75.75 0 0 1-1.06 0L2.22 9.28a.751.751 0 0 1 .018-1.042.751.751 0 0 1 1.042-.018L6 10.94l6.72-6.72a.75.75 0 0 1 1.06 0Z"/></svg>
@@ -14,7 +111,7 @@ export const BODY = `
     <a class="repo-name" href="#">mcp-server</a>
     <span class="repo-badge">Public</span>
     <div class="repo-actions">
-      <button class="repo-btn" onclick="copyText('https://api.eszerzodes.hu/mcp')">
+      <button class="repo-btn" onclick="copyText('https://api.eszerzodes.hu/mcp/mcp')">
         <svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
         URL másolás
       </button>
@@ -52,11 +149,7 @@ export const BODY = `
 <div class="container">
   <!-- About box -->
   <div class="about-box">
-    <p class="about-desc">📝 Kezeld a szerződéseidet AI-val. MCP szerver az Eszerződés.hu platformhoz — csatlakoztasd a Claude-ot, Cursor-t vagy bármely MCP-kompatibilis eszközt.</p>
-    <a class="about-link" href="https://www.eszerzodes.hu">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="var(--text-muted)"><path d="M7.775 3.275a.75.75 0 0 0 1.06 1.06l1.25-1.25a2 2 0 1 1 2.83 2.83l-2.5 2.5a2 2 0 0 1-2.83 0 .75.75 0 0 0-1.06 1.06 3.5 3.5 0 0 0 4.95 0l2.5-2.5a3.5 3.5 0 0 0-4.95-4.95l-1.25 1.25Zm-4.69 9.64a2 2 0 0 1 0-2.83l2.5-2.5a2 2 0 0 1 2.83 0 .75.75 0 0 0 1.06-1.06 3.5 3.5 0 0 0-4.95 0l-2.5 2.5a3.5 3.5 0 1 0 4.95 4.95l1.25-1.25a.75.75 0 0 0-1.06-1.06l-1.25 1.25a2 2 0 0 1-2.83 0Z"/></svg>
-      www.eszerzodes.hu
-    </a>
+    <p class="about-desc">Kezeld a szerződéseidet AI-val. MCP szerver az Eszerződés.hu platformhoz — csatlakoztasd a Claude-ot, Cursor-t vagy bármely MCP-kompatibilis eszközt.</p>
     <div class="about-topics">
       <span class="topic-tag">mcp</span>
       <span class="topic-tag">ai</span>
@@ -151,7 +244,7 @@ export const BODY = `
         <tr><td><span class="method-badge get">GET</span></td><td class="ep-path">/health</td><td class="ep-desc">Szerver állapot ellenőrzés</td></tr>
       </table>
 
-      <h2 id="telepites" style="scroll-margin-top: 2rem;">🚀 Kezdő lépések</h2>
+      <h2 id="telepites" style="scroll-margin-top: 2rem; display:flex; align-items:center; gap:0.5rem">🚀 Kezdő lépések <a href="#" onclick="showNodeModal();return false;" style="font-size:0.75rem; font-weight:400; color:var(--text-muted); margin-left:auto; text-decoration:underline">Node.js telepítési segédlet &rsaquo;</a></h2>
       <div class="test-box">
         <h3 style="margin:0; font-size:1rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem; color:var(--text);">
           <span>🔌 API Kapcsolat Tesztelése</span>
@@ -173,7 +266,7 @@ export const BODY = `
       <!-- Cloud panel -->
       <div id="panel-cloud" class="opt-panel active">
         <h3>1. API token beszerzése</h3>
-        <p>Lépj be az <a href="https://www.eszerzodes.hu">eszerzodes.hu</a> fiókodba, és a Beállítások → API menüben generálj egy Bearer tokent.</p>
+        <p>Lépj be az <a href="https://www.eszerzodes.hu" target="_blank">eszerzodes.hu</a> fiókodba, és a <a href="https://www.eszerzodes.hu/api-tokens" target="_blank">Beállítások → API</a> menüben generálj egy Bearer tokent.</p>
         <h3>2. AI eszköz csatlakoztatása</h3>
         <div class="ai-pills">
           <button class="ai-pill active" style="--ai-c:#D97706" onclick="switchAi(event,'cc-claude-desktop')"><span class="dot"></span>Claude Desktop</button>
@@ -185,34 +278,38 @@ export const BODY = `
           <button class="ai-pill" style="--ai-c:#2B88D8" onclick="switchAi(event,'cc-copilot')"><span class="dot"></span>Copilot</button>
         </div>
         <div id="cc-claude-desktop" class="ai-config active">
-          <p>Szerkeszd a <code class="inline-code">claude_desktop_config.json</code> fájlt (Előfeltétel: Node.js telepítése szükséges):</p>
+          <p>Szerkeszd a <a href="#" onclick="showConfigModal();return false;" style="color:var(--blue);text-decoration:underline">claude_desktop_config.json</a> fájlt:</p>
           <pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"command"</span>: <span class="str">"npx"</span>,
-      <span class="str">"args"</span>: [
-        <span class="str">"-y"</span>,
-        <span class="str">"mcp-remote"</span>,
-        <span class="str">"https://api.eszerzodes.hu/mcp"</span>,
-        <span class="str">"--header"</span>,
-        <span class="str">"Authorization: Bearer &lt;TOKEN&gt;"</span>
-      ]
+      <span class="str">"type"</span>: <span class="str">"http"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
+      <span class="str">"headers"</span>: {
+        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
+      }
     }
   }
 }</code></pre>
           <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
         </div>
-        <div id="cc-claude-code" class="ai-config"><pre class="code-block"><code>claude mcp add eszerzodes \\
+        <div id="cc-claude-code" class="ai-config">
+          <p style="margin-bottom:0.8rem">1. Szerver hozzáadása:</p>
+          <pre class="code-block"><code>claude mcp add eszerzodes \\
   --transport http \\
-  https://api.eszerzodes.hu/mcp \\
-  -H "Authorization: Bearer &lt;TOKEN&gt;"</code></pre></div>
-        <div id="cc-cursor" class="ai-config"><p>Settings → MCP Servers → Add:<br><strong>URL:</strong> <code class="inline-code">https://api.eszerzodes.hu/mcp</code><br><strong>Header:</strong> <code class="inline-code">Authorization: Bearer &lt;TOKEN&gt;</code></p></div>
+  https://api.eszerzodes.hu/mcp/mcp \\
+  -H "Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</code></pre>
+          <p style="margin:1rem 0 0.8rem">2. Skillek/Promptok telepítése (ajánlott):</p>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.5rem">A Claude Desktop esetében a skillek automatikusan elérhetőek az MCP-n keresztül. Claude Code használatakor a projekt mappájába kell telepíteni őket:</p>
+          <pre class="code-block"><code>cd ~/my-project
+curl -sL "https://api.eszerzodes.hu/mcp/api/download-skills" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip</code></pre>
+        </div>
+        <div id="cc-cursor" class="ai-config"><p>Settings → MCP Servers → Add:<br><strong>URL:</strong> <code class="inline-code">https://api.eszerzodes.hu/mcp/mcp</code><br><strong>Header:</strong> <code class="inline-code">Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span></code></p></div>
         <div id="cc-windsurf" class="ai-config"><p>Szerkeszd a <code class="inline-code">~/.codeium/windsurf/mcp_config.json</code> fájlt:</p><pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"serverUrl"</span>: <span class="str">"https://api.eszerzodes.hu/mcp"</span>,
+      <span class="str">"serverUrl"</span>: <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
       <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
+        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
       }
     }
   }
@@ -220,23 +317,23 @@ export const BODY = `
         <div id="cc-cline" class="ai-config"><p>VS Code-ban: Cline → MCP Servers → Configure → szerkeszd a <code class="inline-code">cline_mcp_settings.json</code> fájlt:</p><pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
       <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
+        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
       }
     }
   }
 }</code></pre></div>
-        <div id="cc-chatgpt" class="ai-config"><p>ChatGPT Desktop → Settings → Beta features → MCP Servers → Add:</p><pre class="code-block"><code>URL:    https://api.eszerzodes.hu/mcp
-Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
+        <div id="cc-chatgpt" class="ai-config"><p>ChatGPT Desktop → Settings → Beta features → MCP Servers → Add:</p><pre class="code-block"><code>URL:    https://api.eszerzodes.hu/mcp/mcp
+Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span></code></pre></div>
         <div id="cc-copilot" class="ai-config"><p>VS Code-ban add hozzá a <code class="inline-code">.vscode/settings.json</code> fájlhoz:</p><pre class="code-block"><code>{
   <span class="str">"github.copilot.chat.mcp.servers"</span>: [
     {
       <span class="str">"name"</span>: <span class="str">"eszerzodes"</span>,
       <span class="str">"type"</span>: <span class="str">"http"</span>,
-      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp"</span>,
+      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
       <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
+        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
       }
     }
   ]
@@ -246,7 +343,7 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
       <!-- Self-host panel -->
       <div id="panel-self" class="opt-panel">
         <h3>1. API token beszerzése</h3>
-        <p>Lépj be az <a href="https://www.eszerzodes.hu">eszerzodes.hu</a> fiókodba, és a Beállítások → API menüben generálj egy Bearer tokent.</p>
+        <p>Lépj be az <a href="https://www.eszerzodes.hu" target="_blank">eszerzodes.hu</a> fiókodba, és a <a href="https://www.eszerzodes.hu/api-tokens" target="_blank">Beállítások → API</a> menüben generálj egy Bearer tokent.</p>
         <h3>2. Szerver letöltése és indítása</h3>
         <div class="deploy-tabs">
           <button class="deploy-tab active" onclick="switchDeploy(event,'dep-npm')">npm</button>
@@ -271,33 +368,39 @@ docker compose up -d</code></pre></div>
           <button class="ai-pill" style="--ai-c:#10A37F" onclick="switchAi(event,'sc-chatgpt')"><span class="dot"></span>ChatGPT</button>
           <button class="ai-pill" style="--ai-c:#2B88D8" onclick="switchAi(event,'sc-copilot')"><span class="dot"></span>Copilot</button>
         </div>
-        <div id="sc-claude-desktop" class="ai-config active"><p>Szerkeszd a <code class="inline-code">claude_desktop_config.json</code> fájlt (Előfeltétel: Node.js telepítése szükséges):</p><pre class="code-block"><code>{
+        <div id="sc-claude-desktop" class="ai-config active">
+          <p>Szerkeszd a <a href="#" onclick="showConfigModal();return false;" style="color:var(--blue);text-decoration:underline">claude_desktop_config.json</a> fájlt (Előfeltétel: <a href="#" onclick="showNodeModal();return false;" style="color:var(--blue);text-decoration:underline">Node.js telepítése szükséges</a> a szerver futtatásához):</p>
+          <pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"command"</span>: <span class="str">"npx"</span>,
-      <span class="str">"args"</span>: [
-        <span class="str">"-y"</span>,
-        <span class="str">"mcp-remote"</span>,
-        <span class="str">"http://localhost:3000/mcp"</span>,
-        <span class="str">"--header"</span>,
-        <span class="str">"Authorization: Bearer &lt;TOKEN&gt;"</span>
-      ]
+      <span class="str">"type"</span>: <span class="str">"http"</span>,
+      <span class="str">"url"</span>: <span class="str">"http://localhost:3000/mcp"</span>,
+      <span class="str">"headers"</span>: {
+        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
+      }
     }
   }
 }</code></pre>
           <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
         </div>
-        <div id="sc-claude-code" class="ai-config"><pre class="code-block"><code>claude mcp add eszerzodes \\
+        <div id="sc-claude-code" class="ai-config">
+          <p style="margin-bottom:0.8rem">1. Szerver hozzáadása:</p>
+          <pre class="code-block"><code>claude mcp add eszerzodes \\
   --transport http \\
   http://localhost:3000/mcp \\
-  -H "Authorization: Bearer &lt;TOKEN&gt;"</code></pre></div>
-        <div id="sc-cursor" class="ai-config"><p>Settings → MCP Servers → Add:<br><strong>URL:</strong> <code class="inline-code">http://localhost:3000/mcp</code><br><strong>Header:</strong> <code class="inline-code">Authorization: Bearer &lt;TOKEN&gt;</code></p></div>
+  -H "Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</code></pre>
+          <p style="margin:1rem 0 0.8rem">2. Skillek/Promptok telepítése (ajánlott):</p>
+          <p style="font-size:0.85rem;color:var(--text-muted);margin-bottom:0.5rem">Claude Code használatakor a projekt mappájába érdemes telepíteni a skilleket:</p>
+          <pre class="code-block"><code>cd ~/my-project
+curl -sL "https://api.eszerzodes.hu/mcp/api/download-skills" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip</code></pre>
+        </div>
+        <div id="sc-cursor" class="ai-config"><p>Settings → MCP Servers → Add:<br><strong>URL:</strong> <code class="inline-code">http://localhost:3000/mcp</code><br><strong>Header:</strong> <code class="inline-code">Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span></code></p></div>
         <div id="sc-windsurf" class="ai-config"><p>Szerkeszd a <code class="inline-code">~/.codeium/windsurf/mcp_config.json</code> fájlt:</p><pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
       <span class="str">"serverUrl"</span>: <span class="str">"http://localhost:3000/mcp"</span>,
       <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
+        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
       }
     }
   }
@@ -307,13 +410,13 @@ docker compose up -d</code></pre></div>
     <span class="str">"eszerzodes"</span>: {
       <span class="str">"url"</span>: <span class="str">"http://localhost:3000/mcp"</span>,
       <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
+        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
       }
     }
   }
 }</code></pre></div>
         <div id="sc-chatgpt" class="ai-config"><p>ChatGPT Desktop → Settings → Beta features → MCP Servers → Add:</p><pre class="code-block"><code>URL:    http://localhost:3000/mcp
-Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
+Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span></code></pre></div>
         <div id="sc-copilot" class="ai-config"><p>VS Code-ban add hozzá a <code class="inline-code">.vscode/settings.json</code> fájlhoz:</p><pre class="code-block"><code>{
   <span class="str">"github.copilot.chat.mcp.servers"</span>: [
     {
@@ -321,7 +424,7 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
       <span class="str">"type"</span>: <span class="str">"http"</span>,
       <span class="str">"url"</span>: <span class="str">"http://localhost:3000/mcp"</span>,
       <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer &lt;TOKEN&gt;"</span>
+        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
       }
     }
   ]
@@ -467,11 +570,25 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
       </div>
       
       <div class="sec-content" id="skills-content" style="display:none;">
+        <!-- Jó hír highlight box -->
+        <div style="background:rgba(63,185,80,0.1); border:1px solid rgba(63,185,80,0.3); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.5rem; display:flex; align-items:flex-start; gap:1rem">
+          <span style="font-size:1.5rem">🎉</span>
+          <div>
+            <h4 style="color:var(--green); margin:0 0 0.25rem; font-size:1rem">Jó hír: Automatikus skillek!</h4>
+            <p style="font-size:0.88rem; color:var(--text); line-height:1.5; margin:0">Ha az MCP szerver csatlakozik a <strong>Claude Desktop</strong>-hoz, a lenti 8 beépített skill/prompt <strong>automatikusan elérhető lesz</strong> a szerveren keresztül. Nem kell külön telepítened vagy bemásolnod őket – a Claude azonnal tudni fogja, hogyan kezelje a szerződéseidet!</p>
+          </div>
+        </div>
+
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1.5rem; flex-wrap:wrap; margin: 1rem 0;">
-          <p style="margin:0; font-size:0.85rem; color:var(--text-muted); line-height:1.4; max-width:600px;">A 8 fő eszerződés munkafolyamat be van építve a szerverbe mint <strong>MCP Prompt</strong>, de külső plugin-ként is bekerülhetnek a Claude Desktop kliensedbe. Kattints a lenti "1-klikk telepítés" gombra, illeszd be a Terminálba, aminek a hatására létrejön a letöltött skillekkel egy <code class="inline-code">Eszerzodes-AI-Plugin</code> mappa a Mac Asztalodon (Desktop). Végül nyisd meg a Claude appban a <strong>Customize -> Skills -> Personal plugins [+]</strong> menüt és válaszd ki ezt a mappát!</p>
-          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items: stretch;">
-            <button class="skill-banner-btn" onclick="copyInstallCmd(this)" style="background:var(--bg-subtle); color:var(--text); border:1px solid rgba(88,166,255,0.4); cursor:pointer; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">💻 1-klikk letöltés az Asztalra (Terminal)</button>
-            <a class="skill-banner-btn" href="/api/download-skills" style="background:var(--blue); color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">📥 Letöltés (.zip)</a>
+          <div style="flex:1; min-width:300px;">
+            <p style="margin:0; font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Ha viszont <strong>Claude Code</strong>-ot használsz (terminálból), vagy egyedi plugin-ként szeretnéd kezelni őket, akkor érdemes a projekt mappájába telepíteni. Futtasd ezt a parancsot a terminálban:</p>
+            <div class="config-path-box" style="margin-top:0.75rem; font-size:0.75rem; background:var(--bg); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+              <code style="color:var(--text); word-break:break-all">curl -sL "https://api.eszerzodes.hu/mcp/api/download-skills" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip</code>
+              <button class="btn-mini" onclick="copyText('curl -sL &quot;https://api.eszerzodes.hu/mcp/api/download-skills&quot; -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip')">Másolás</button>
+            </div>
+          </div>
+          <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items: stretch; justify-content: flex-end;">
+            <a class="skill-banner-btn" href="https://api.eszerzodes.hu/mcp/api/download-skills" style="background:var(--blue); color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">📥 Skillek letöltése (.zip)</a>
           </div>
         </div>
         <div id="skills-container"></div>
@@ -489,6 +606,16 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
       <div class="sec-content" id="gallery-content" style="display: none;">
         <p class="sec-desc-inline">Kattints egy sorra a prompt másolásához, majd illeszd be a Claude Desktopba!</p>
         <div class="prompt-gallery">
+        <!-- 0. Indulás -->
+        <div class="prompt-cat" style="border-color: var(--green);">
+          <div class="pc-header">✨ Gyors indulás & Onboarding <span class="pc-badge" style="background:var(--green)">Új</span></div>
+          <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Vezess végig az Eszerződés.hu beállításán: először kérdezd meg a cégem nevét vagy weblapunk címét, és az alapján segíts beállítani az arculatomat (branding). Utána állítsunk be egy egyedi státusz munkafolyamatot (kérdezz rá, milyen típusú folyamatot szeretnék). Ezután elemezd, kiket érdemes hozzáadnom társfiókként vagy munkatársként a rendszerhez. Kérdezz rá, hogy szeretnék-e lejárati/megújítási logikát a határozott idejű szerződésekhez (riasztás lejárat előtt X nappal), és alakítsunk ki egy riporting rendszert. Végül ajánld fel, hogy kiküldjük együtt az első teszt szerződésemet &bdquo;Szerződés tesztelésre&rdquo; típussal, és kérd be hozzá a célszemély email címét!')">
+              <span class="prompt-icon">🚀</span>
+              <span class="prompt-text" style="color:var(--text); font-weight:600;">&ldquo;Vezess végig a teljes beállításon és az első szerződésemen&rdquo;</span>
+            </div>
+          </div>
+        </div>
         <!-- 1. Lekérdezés -->
         <div class="prompt-cat">
           <div class="pc-header">🔍 Dashboard & Statisztika</div>
@@ -540,6 +667,7 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
             <div class="prompt-row" onclick="copyText('Minden hétfőn reggel nézd át the 7 napnál régebbi várakozó szerződéseimet és küldj nekem egy listát róluk!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Ütemezett hétfői ellenőrzés&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Ha egy szerződés lejárata 14 napon belül van, automatikusan állítsd a belső státuszát \'Megújítás alatt\'-ra!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Automata lejárati eszkaláció&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Figyeld az elutasított szerződéseket: ha egy partner elutasítja, jegyezd fel és értesíts azonnal!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Elutasítás-figyelő rendszer&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Elemezd, hogy vannak-e határozott idejű szerződéseim, és állíts be egy automatikus riasztást a lejáratuk előtt 30 nappal!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Lejárati & megújítási riasztás&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Készíts egy automata munkafolyamatot, ami új partner regisztrációjakor azonnal kiküld egy \'Üdvözlő NDA\' sablont!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Automata Üdvözlő-NDA workflow&rdquo;</span></div>
           </div>
         </div>
@@ -548,9 +676,9 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
         <div class="prompt-cat" style="border-color: rgba(210, 153, 34, 0.4);">
           <div class="pc-header">🚀 Pro Munkafolyamatok <span class="pc-badge pro">Advanced</span></div>
           <div class="pc-body">
-            <div class="prompt-row" onclick="copyText('PRO SZINT: Keresd meg a legrégebbi aláíratlan szerződésemet, hasonlítsd össze a sablonjával, hogy minden mező ki van-e töltve, töltsd le a PDF változatát és foglald össze nekem 3 pontban, miért akadhatott el a folyamat a partner adatai alapján!')"><span class="prompt-icon">🔥</span><span class="prompt-text" style="color:var(--blue); font-weight:600;">&ldquo;Teljes folyamat-diagnosztika&rdquo;</span></div>
-            <div class="prompt-row" onclick="copyText('Ha érkezik egy új aláírt szerződésem, töltsd le, vonj ki belőle minden fontos dátumot az ai_extract segítségével, és készíts róluk egy emlékeztető listát')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Adatkinyerés signed PDF-ből&rdquo;</span></div>
-            <div class="prompt-row" onclick="copyText('Hasonlítsd össze a Bérleti szerződés és az NDA sablonjaimat: melyek az átfedő változók, és melyiknél kell több adatot bekérni a partnertől?')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon összehasonlítás&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('PRO SZINT: Keresd meg a legrégebbi aláíratlan szerződésemet, hasonlítsd össze a sablonjával, hogy minden mező ki van-e töltve, töltsd le a PDF változatát és foglald össze nekem 3 pontban, miért akadhatott el a folyamat a partner adatai alapján!')"><span class="prompt-icon">🚀</span><span class="prompt-text" style="color:var(--blue); font-weight:600;">&ldquo;Teljes folyamat-diagnosztika&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Ha érkezik egy új aláírt szerződésem, töltsd le, vonj ki belőle minden fontos dátumot az ai_extract segítségével, és készíts róluk egy emlékeztető listát')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Adatkinyerés signed PDF-ből&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Hasonlítsd össze a Bérleti szerződés és az NDA sablonjaimat: melyek az átfedő változók, és melyiknél kell több adatot bekérni a partnertől?')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Sablon összehasonlítás&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Elemezd az összes \'Bérleti\' típusú szerződésem: van benne olyan, aminek a lejárata után nem kötöttük meg az újat?')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Bérleti folytonosság audit&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Vedd a legutóbbi 5 aláírt szerződésem, töltsd le őket, és készíts egy összevont Excel-szerű riportot a bennük szereplő összegekről!')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Multi-file pénzügyi extrakció&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Ha egy partner adataiban változás történik az ai_extract alapján (pld. új cím a PDF-ben), frissítsd a partner adatait a rendszerben is!')"><span class="prompt-icon">🚀</span><span class="prompt-text">&ldquo;Intelligens partner-adat frissítés&rdquo;</span></div>
@@ -567,6 +695,40 @@ Header: Authorization: Bearer &lt;TOKEN&gt;</code></pre></div>
             <div class="prompt-row" onclick="copyText('Vond vissza kovacs.bela@teszt.hu minden hozzáférését, távolítsd el a fiókból!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatárs eltávolítása&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Listázd ki azokat a munkatársakat, akik admin jogkörrel rendelkeznek!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Admin jogosultságok ellenőrzése&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Módosítsd szabo.anna@teszt.hu jogkörét nézőre és vond meg az aláírási jogát!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Jogkör módosítása&rdquo;</span></div>
+          </div>
+        </div>
+        
+        <div class="prompt-cat" style="border-color: #f85149;">
+          <div class="pc-header">🛡️ Audit & Kockázatelemzés <span class="pc-badge" style="background:#f85149">Expert</span></div>
+          <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Készíts nekem egy teljes szerződés-intelligencia riportot az Eszerződés.hu rendszeremből. Lépj végig az alábbi szekvencián:\n1. Adatgyűjtés: Kérd le az összes szerződést, a sablonlistát, az egyéni státuszokat és a lejáró szerződéseket (90 napon belül). Számold ki az összesítőket.\n2. KPI összefoglaló: Mutasd meg: összes szerződés száma, vár aláírásra, draft, aláírt, sablonok száma, egyedi státuszcímkék.\n3. Pipeline egészség: Aláírási ráta (aláírt / összes kiküldött), elakadási index (7, 14, 30 napos szintek).\n4. Sablon-káosz rangsor: Típus szerinti csoportosítás, duplikátumok, javaslat összevonásra/törlésre.\n5. Státusz audit: Státuszcímkék száma, elavult/teszt címkék aránya, kanban-oszlop audit.\n6. Kockázati mátrix: 0–100 skálán (aláírási sebesség, konzisztencia, lejárati lefedettség, státusz tisztaság, folyamat fegyelem). Legkritikusabb kockázat kiemelése.\n7. Top 3 azonnali teendő: Konkrét lépések.\nAz egész riportot strukturáltan, szekciónként tagolva add vissza, számokkal alátámasztva.')">
+              <span class="prompt-icon">🔥</span>
+              <span class="prompt-text" style="color:var(--blue); font-weight:600;">&ldquo;Eszerződés Intelligence Report &ndash; Teljes Audit&rdquo;</span>
+            </div>
+            <div class="prompt-row" onclick="copyText('Végezz egy Compliance Clock Audit-ot: térképezd fel az összes határozott idejű szerződésemet, és készíts egy idővonalat a 30, 60 és 90 napon belül lejáró tételekről. Prioritizáld őket érték vagy kockázat szerint (pl. ha egy fő beszállítói keretszerződés Q2-ben jár le).')">
+              <span class="prompt-icon">▸</span>
+              <span class="prompt-text">&ldquo;Compliance Clock Audit &ndash; A ketyegő bomba&rdquo;</span>
+            </div>
+            <div class="prompt-row" onclick="copyText('Végezz egy Liability Black Hole Audit-ot: keresd meg azokat a szerződéseket, ahol hiányzik a felelősségkorlátozás, a force majeure klauzula vagy a vitarendezési mechanizmus. Kifejezetten nézd át az utolsó 5 szerződésemet: van-e bennük korlátlan felelősségvállalás vagy hiányzó értékhatár?')">
+              <span class="prompt-icon">▸</span>
+              <span class="prompt-text">&ldquo;Liability Black Hole Audit &ndash; Menekülőutak&rdquo;</span>
+            </div>
+            <div class="prompt-row" onclick="copyText('Végezz egy Signatory Ghost Audit-ot: vizsgáld meg, hogy az aláírók szerepköre megfelel-e a szerződés értékének (pl. >5M Ft-nál junior írt-e alá). Válassz ki egy konkrét nagy értékű szerződést, elemezd az aláírót (akár külső Linkedin/weboldal adatokkal is), és vesd össze a szerződés tartalmával: tudatos delegálás vagy kockázat?')">
+              <span class="prompt-icon">▸</span>
+              <span class="prompt-text">&ldquo;Signatory Ghost Audit &ndash; Aláírók elemzése&rdquo;</span>
+            </div>
+            <div class="prompt-row" onclick="copyText('Végezz egy Relationship Temperature Audit-ot: nézd meg szerződésenként az utolsó interakció dátumát, a megújítások számát és az aláírási sebességet. Számolj ezekből egy &bdquo;kapcsolati hőmérsékletet&rdquo; (pl. ki a leghűségesebb partnered, ki ír alá leggyorsabban), és tegyél javaslatot keretszerződés kötésére a legforróbb kapcsolatoknál!')">
+              <span class="prompt-icon">▸</span>
+              <span class="prompt-text">&ldquo;Relationship Temperature Audit &ndash; Hideg vagy forró?&rdquo;</span>
+            </div>
+            <div class="prompt-row" onclick="copyText('Végezz egy Zombie Contract Audit-ot: keresd meg az aktív státuszú, de valójában elfeledett szerződéseket. Szűrd ki azokat, ahol az utolsó kapcsolódó esemény több mint 365 napja volt. Ezek zombik, amik torzítják a portfolióképet &ndash; tegyél javaslatot a lezárásukra vagy archiválásukra!')">
+              <span class="prompt-icon">▸</span>
+              <span class="prompt-text">&ldquo;Zombie Contract Audit &ndash; A halott, de élő szerződések&rdquo;</span>
+            </div>
+            <div class="prompt-row" onclick="copyText('Végezz egy Dead Weight Audit-ot: listázd ki az összes aláírásra váró szerződést, és csoportosítsd aszerint, hogy hány napja várnak. Külön emeld ki azokat, amelyek 14 napnál régebben vannak kiküldve, de senki nem írta alá. Adj összefoglalót arról, hogy hány szerződés elakadt és mióta!')">
+              <span class="prompt-icon">▸</span>
+              <span class="prompt-text">&ldquo;Dead Weight Audit &ndash; Elakadt aláírások&rdquo;</span>
+            </div>
           </div>
         </div>
       </div>
@@ -752,13 +914,23 @@ function toggleSection(sid, forceOpen) {
 }
 
 async function checkConnection(btn) {
-  const input = document.getElementById('test-api-key');
   const result = document.getElementById('test-result');
+  
+  // Hostname check: The test endpoint is only for local instances
+  if (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1') {
+    result.className = "test-result error";
+    result.style.display = 'flex';
+    result.innerHTML = '❌ <strong>Ez a funkció csak helyi futtatáskor működik.</strong> A felhő alapú relay szerver (api.eszerzodes.hu) biztonsági okokból nem támogatja a közvetlen token-ellenőrzést. Használd a lokálisan futó szervert a teszteléshez!';
+    return;
+  }
+
+  const input = document.getElementById('test-api-key');
   const apiKey = input.value.trim();
   
   if (!apiKey) {
     result.className = "test-result error";
     result.innerHTML = '❌ Kérlek adj meg egy API kulcsot!';
+    result.style.display = 'flex';
     return;
   }
   
@@ -766,6 +938,8 @@ async function checkConnection(btn) {
   btn.disabled = true;
   btn.innerHTML = '⌛ Ellenőrzés...';
   result.style.display = 'none';
+  result.style.flexDirection = 'row'; 
+  result.style.alignItems = 'center';
   
   try {
     const res = await fetch('/api/check-token', {
@@ -778,45 +952,67 @@ async function checkConnection(btn) {
     
     if (data.success) {
       result.className = "test-result success";
-      result.innerHTML = \`✅ <strong>Sikeres csatlakozás!</strong> Az API elérhető. (\${data.templateCount} sablon található)\`;
+      const s = data.subscription;
+      result.style.flexDirection = 'column';
+      result.style.alignItems = 'flex-start';
+      
+      let details = \`Csomag: <strong>\${s.package}</strong> (\${s.used}/\${s.limit} felhasznált) | Lejárat: <strong>\${s.expiry}</strong>\`;
+      if (s.credits !== null) {
+        details += \` | Egyenleg: <strong>\${s.credits} kredit</strong>\`;
+      }
+      
+      result.innerHTML = \`<div style="display:flex; align-items:center; gap:0.5rem;">✅ <strong>Sikeres csatlakozás!</strong></div>
+      <div style="margin-left:1.6rem; font-size:0.8rem; opacity:0.9;">
+        \${details}
+      </div>\`;
     } else {
+      result.style.flexDirection = 'row';
+      result.style.alignItems = 'center';
       result.className = "test-result error";
       result.innerHTML = \`❌ <strong>Hiba:</strong> \${data.error}\`;
     }
   } catch (err) {
-    result.className = "test-result error";
-    result.innerHTML = '❌ <strong>Hiba:</strong> Nem sikerült elérni az MCP szervert.';
-  } finally {
-    btn.disabled = false;
-    btn.innerHTML = oldText;
-    result.style.display = 'flex';
-  }
+  result.className = "test-result error";
+  result.innerHTML = '❌ <strong>Hiba:</strong> Nem sikerült elérni az MCP szervert.';
+} finally {
+  btn.disabled = false;
+  btn.innerHTML = oldText;
+  result.style.display = 'flex';
+}
 }
 
-function copyText(text){
-  navigator.clipboard.writeText(text).then(()=>showToast());
+function copyText(text) {
+  navigator.clipboard.writeText(text).then(() => showToast());
 }
 
-function copyCode(btn){
-  const pre=btn.closest('.code-wrap').querySelector('code');
-  const text=pre.textContent;
-  navigator.clipboard.writeText(text).then(()=>{
-    btn.innerHTML=CHECK_ICON+' Másolva!';
+function copyCode(btn) {
+  const pre = btn.closest('.code-wrap').querySelector('code');
+  const temp = pre.cloneNode(true);
+  // Replace masked placeholders with real ones before copying
+  temp.querySelectorAll('.token-placeholder').forEach(span => {
+    if (span.hasAttribute('data-token')) {
+      span.textContent = span.getAttribute('data-token');
+    }
+  });
+  const text = temp.textContent;
+  
+  navigator.clipboard.writeText(text).then(() => {
+    btn.innerHTML = CHECK_ICON + ' Másolva!';
     btn.classList.add('copied');
     showToast();
-    setTimeout(()=>{btn.innerHTML=COPY_ICON+' Másolás';btn.classList.remove('copied');},2000);
+    setTimeout(() => { btn.innerHTML = COPY_ICON + ' Másolás'; btn.classList.remove('copied'); }, 2000);
   });
 }
 
 function copySkill(e, btn) {
   e.stopPropagation();
   const pre = btn.closest('.skill-card').querySelector('pre');
-  navigator.clipboard.writeText(pre.textContent).then(()=>{
+  navigator.clipboard.writeText(pre.textContent).then(() => {
     const old = btn.innerHTML;
     btn.classList.add('btn-success');
     btn.innerHTML = '✅ Másolva';
     showToast();
-    setTimeout(()=>{
+    setTimeout(() => {
       btn.innerHTML = old;
       btn.classList.remove('btn-success');
     }, 2000);
@@ -824,23 +1020,30 @@ function copySkill(e, btn) {
 }
 
 function loadSkills() {
-  fetch('/api/skills').then(r=>r.json()).then(skills=>{
-    const cont = document.getElementById('skills-container');
-    if(!cont) return;
-    
-    if(skills.length===0){
-      cont.innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem">Nem található skill a szerveren.</span>';
+  const cont = document.getElementById('skills-container');
+  if (!cont) return;
+
+  cont.innerHTML = '<div style="padding:1rem;color:var(--text-muted);font-size:0.85rem">⌛ AI skillek betöltése...</div>';
+
+  fetch('/api/skills').then(r => {
+    if (!r.ok) throw new Error('Hiba a skillek lekérésekor: ' + r.status);
+    return r.json();
+  }).then(skills => {
+    cont.innerHTML = ''; // Clear loading
+
+    if (skills.length === 0) {
+      cont.innerHTML = '<span style="color:var(--text-muted);font-size:0.85rem">⚠️ Nem található betöltött skill a szerveren (ellenőrizd a .claude/skills mappát).</span>';
       return;
     }
-    
-    skills.forEach(skill=>{
+
+    skills.forEach(skill => {
       const card = document.createElement('div');
       card.className = 'skill-card';
-      
+
       const header = document.createElement('div');
       header.className = 'skill-header';
       header.onclick = () => card.classList.toggle('expanded');
-      
+
       header.innerHTML = \`
         <div class="skill-title"><span class="tc-chevron">▶</span> <code>\${skill.id}</code></div>
         <div class="skill-actions" onclick="event.stopPropagation()">
@@ -856,7 +1059,10 @@ function loadSkills() {
       card.appendChild(details);
       cont.appendChild(card);
     });
-  }).catch(err => console.error("Nem sikerült lekérni a skilleket", err));
+  }).catch(err => {
+    cont.innerHTML = \`<span style="color:var(--red);font-size:0.85rem">❌ Hiba történt a skillek betöltésekor. (Részletek a konzolban)</span>\`;
+    console.error("Nem sikerült lekérni a skilleket", err);
+  });
 }
 
 function toggleCard(card,e){
@@ -891,6 +1097,24 @@ document.addEventListener('DOMContentLoaded',()=>{
   });
   
   loadSkills();
+  
+  // Dynamic token replacement
+  const tokenInput = document.getElementById('test-api-key');
+  if (tokenInput) {
+    tokenInput.addEventListener('input', (e) => {
+      const val = e.target.value.trim();
+      document.querySelectorAll('.token-placeholder').forEach(el => {
+        if (val) {
+          el.setAttribute('data-token', val);
+          // Only show dots, but keep the data-token for copying
+          el.textContent = '••••••••••••••••'; 
+        } else {
+          el.removeAttribute('data-token');
+          el.innerHTML = '&lt;TOKEN&gt;';
+        }
+      });
+    });
+  }
 });
 
 function switchOpt(opt){
@@ -925,8 +1149,31 @@ document.addEventListener('DOMContentLoaded',()=>{
     const btn=document.createElement('button');
     btn.className='copy-btn';
     btn.innerHTML=COPY_ICON+' Másolás';
-    btn.onclick=function(){copyCode(this);};
+    btn.onclick=function(e){e.stopPropagation(); copyCode(this);};
     wrap.appendChild(btn);
+    // Click anywhere on the box to copy
+    wrap.onclick=function(){copyCode(this.querySelector('.copy-btn'));};
   });
 });
+
+function showConfigModal(){
+  document.getElementById('config-modal').classList.add('active');
+}
+function closeModal(){
+  document.getElementById('config-modal').classList.remove('active');
+}
+function switchModalTab(btn, id){
+  const card = btn.closest('.modal-card');
+  card.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  card.querySelectorAll('.modal-pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
+
+function showNodeModal(){
+  document.getElementById('node-modal').classList.add('active');
+}
+function closeNodeModal(){
+  document.getElementById('node-modal').classList.remove('active');
+}
 </script>`;
