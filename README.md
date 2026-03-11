@@ -79,15 +79,21 @@ Add hozzá a `claude_desktop_config.json` fájlhoz:
 {
   "mcpServers": {
     "eszerzodes": {
-      "type": "http",
-      "url": "https://api.eszerzodes.hu/mcp/mcp",
-      "headers": {
-        "Authorization": "Bearer <API_TOKENED>"
-      }
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "https://api.eszerzodes.hu/mcp/mcp",
+        "--header",
+        "Authorization: Bearer <API_TOKENED>"
+      ]
     }
   }
 }
 ```
+
+> [!NOTE]
+> Mivel a Claude Desktop UI jelenleg nem támogat egyedi fejléceket (headers), beépített proxy gyanánt az `mcp-remote` csomagot használjuk a felhő kapcsolathoz is. Ne felejtsd el telepíteni a [Node.js](https://nodejs.org/)-t!
 
 #### Cursor / Windsurf / Cline
 Használd a következő végpontot: `https://api.eszerzodes.hu/mcp/mcp` az `Authorization` headerrel együtt.
@@ -98,17 +104,20 @@ Használd a következő végpontot: `https://api.eszerzodes.hu/mcp/mcp` az `Auth
 
 #### Claude Desktop
 
-Add hozzá a `claude_desktop_config.json` fájlhoz:
+A helyi MCP szerverhez a `claude_desktop_config.json` fájlban a `npx mcp-remote` parancs megadása az egyetlen működő módszer. Add hozzá az alábbiakat:
 
 ```json
 {
   "mcpServers": {
     "eszerzodes": {
-      "type": "http",
-      "url": "http://localhost:3000/mcp",
-      "headers": {
-        "Authorization": "Bearer <API_TOKENED>"
-      }
+      "command": "npx",
+      "args": [
+        "-y",
+        "mcp-remote",
+        "http://localhost:3000/mcp",
+        "--header",
+        "Authorization: Bearer <API_TOKENED>"
+      ]
     }
   }
 }

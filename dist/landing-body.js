@@ -281,19 +281,15 @@ exports.BODY = `
           <button class="ai-pill" style="--ai-c:#2B88D8" onclick="switchAi(event,'cc-copilot')"><span class="dot"></span>Copilot</button>
         </div>
         <div id="cc-claude-desktop" class="ai-config active">
-          <p>Szerkeszd a <a href="#" onclick="showConfigModal();return false;" style="color:var(--blue);text-decoration:underline">claude_desktop_config.json</a> fájlt:</p>
-          <pre class="code-block"><code>{
-  <span class="str">"mcpServers"</span>: {
-    <span class="str">"eszerzodes"</span>: {
-      <span class="str">"type"</span>: <span class="str">"http"</span>,
-      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
-      <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
-      }
-    }
-  }
-}</code></pre>
-          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
+          <ol style="margin-left: 1.5rem; margin-bottom: 0.8rem; line-height: 1.6;">
+            <li>Nyisd meg a <strong>Claude Desktop</strong> alkalmazást.</li>
+            <li>Menj a <strong>Settings → Connectors</strong> menüpontra.</li>
+            <li>Kattints az <strong>Add custom connector</strong> gombra.</li>
+            <li>Add meg ezeket az adatokat:<br>
+            <strong>URL:</strong> <code>https://api.eszerzodes.hu/mcp/mcp</code><br>
+            <strong>Auth header:</strong> <code>Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span></code></li>
+          </ol>
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Ez a legegyszerűbb mód, mivel a felhő relay URL-t a konfigurációs fájl jelenleg nem támogatja.</p>
         </div>
         <div id="cc-claude-code" class="ai-config">
           <p style="margin-bottom:0.8rem">1. Szerver hozzáadása:</p>
@@ -376,11 +372,14 @@ docker compose up -d</code></pre></div>
           <pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"type"</span>: <span class="str">"http"</span>,
-      <span class="str">"url"</span>: <span class="str">"http://localhost:3000/mcp"</span>,
-      <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
-      }
+      <span class="str">"command"</span>: <span class="str">"npx"</span>,
+      <span class="str">"args"</span>: [
+        <span class="str">"-y"</span>,
+        <span class="str">"mcp-remote"</span>,
+        <span class="str">"http://localhost:3000/mcp"</span>,
+        <span class="str">"--header"</span>,
+        <span class="str">"Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
+      ]
     }
   }
 }</code></pre>
@@ -584,13 +583,13 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1.5rem; flex-wrap:wrap; margin: 1rem 0;">
           <div style="flex:1; min-width:300px;">
             <p style="margin:0; font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Ha viszont <strong>Claude Code</strong>-ot használsz (terminálból), vagy egyedi plugin-ként szeretnéd kezelni őket, akkor érdemes a projekt mappájába telepíteni. Futtasd ezt a parancsot a terminálban:</p>
-            <div class="config-path-box" style="margin-top:0.75rem; font-size:0.75rem; background:var(--bg); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:1rem;">
-              <code style="color:var(--text); word-break:break-all">curl -sL "https://api.eszerzodes.hu/mcp/api/download-skills" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip</code>
-              <button class="btn-mini" onclick="copyText('curl -sL &quot;https://api.eszerzodes.hu/mcp/api/download-skills&quot; -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip')">Másolás</button>
-            </div>
           </div>
           <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items: stretch; justify-content: flex-end;">
             <a class="skill-banner-btn" href="https://api.eszerzodes.hu/mcp/api/download-skills" style="background:var(--blue); color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">📥 Skillek letöltése (.zip)</a>
+          </div>
+          <div class="config-path-box" style="margin-top:0.75rem; font-size:0.75rem; background:var(--bg); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+            <code style="color:var(--text); word-break:break-all">curl -sL "https://api.eszerzodes.hu/mcp/api/download-skills" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip</code>
+            <button class="btn-mini" onclick="copyText('curl -sL &quot;https://api.eszerzodes.hu/mcp/api/download-skills&quot; -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip')">Másolás</button>
           </div>
         </div>
         <div id="skills-container"></div>

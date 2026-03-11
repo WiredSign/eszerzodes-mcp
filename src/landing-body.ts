@@ -278,19 +278,22 @@ export const BODY = `
           <button class="ai-pill" style="--ai-c:#2B88D8" onclick="switchAi(event,'cc-copilot')"><span class="dot"></span>Copilot</button>
         </div>
         <div id="cc-claude-desktop" class="ai-config active">
-          <p>Szerkeszd a <a href="#" onclick="showConfigModal();return false;" style="color:var(--blue);text-decoration:underline">claude_desktop_config.json</a> fájlt:</p>
+          <p>Szerkeszd a <a href="#" onclick="showConfigModal();return false;" style="color:var(--blue);text-decoration:underline">claude_desktop_config.json</a> fájlt (Előfeltétel: <a href="#" onclick="showNodeModal();return false;" style="color:var(--blue);text-decoration:underline">Node.js telepítése szükséges</a>):</p>
           <pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"type"</span>: <span class="str">"http"</span>,
-      <span class="str">"url"</span>: <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
-      <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
-      }
+      <span class="str">"command"</span>: <span class="str">"npx"</span>,
+      <span class="str">"args"</span>: [
+        <span class="str">"-y"</span>,
+        <span class="str">"mcp-remote"</span>,
+        <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
+        <span class="str">"--header"</span>,
+        <span class="str">"Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
+      ]
     }
   }
 }</code></pre>
-          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">A Connectors UI nem támogatja a Bearer tokeneket, ezért a beépített HTTP proxy-t használjuk. Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
         </div>
         <div id="cc-claude-code" class="ai-config">
           <p style="margin-bottom:0.8rem">1. Szerver hozzáadása:</p>
@@ -373,11 +376,14 @@ docker compose up -d</code></pre></div>
           <pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
-      <span class="str">"type"</span>: <span class="str">"http"</span>,
-      <span class="str">"url"</span>: <span class="str">"http://localhost:3000/mcp"</span>,
-      <span class="str">"headers"</span>: {
-        <span class="str">"Authorization"</span>: <span class="str">"Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
-      }
+      <span class="str">"command"</span>: <span class="str">"npx"</span>,
+      <span class="str">"args"</span>: [
+        <span class="str">"-y"</span>,
+        <span class="str">"mcp-remote"</span>,
+        <span class="str">"http://localhost:3000/mcp"</span>,
+        <span class="str">"--header"</span>,
+        <span class="str">"Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
+      ]
     }
   }
 }</code></pre>
