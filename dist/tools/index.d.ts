@@ -4,4 +4,5 @@ export { registerTemplateTools } from "./templates.js";
 export { registerDocumentTools } from "./documents.js";
 export { registerThirdPartyTools } from "./third-party.js";
 export { registerMonitoringTools } from "./monitoring.js";
+export { registerUserTools } from "./user.js";
 //# sourceMappingURL=index.d.ts.map

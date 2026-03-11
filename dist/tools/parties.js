@@ -104,14 +104,5 @@ Returns the result of the operation.`, {
             email: params.email,
         });
     }));
-    // ── user_info ──────────────────────────────────────────────────────
-    server.tool("user_info", `Gets information about the currently authenticated user.
-
-Use this when the user asks about their account details, subscription,
-or membership information.
-
-Returns user details including id, name, email, and membership info.`, {}, async () => (0, common_js_1.wrapToolHandler)(async () => {
-        return await client.get("/agent/user-info");
-    }));
 }
 //# sourceMappingURL=parties.js.map

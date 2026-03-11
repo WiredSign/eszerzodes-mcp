@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.registerMonitoringTools = exports.registerThirdPartyTools = exports.registerDocumentTools = exports.registerTemplateTools = exports.registerPartyTools = exports.registerContractTools = void 0;
+exports.registerUserTools = exports.registerMonitoringTools = exports.registerThirdPartyTools = exports.registerDocumentTools = exports.registerTemplateTools = exports.registerPartyTools = exports.registerContractTools = void 0;
 var contracts_js_1 = require("./contracts.js");
 Object.defineProperty(exports, "registerContractTools", { enumerable: true, get: function () { return contracts_js_1.registerContractTools; } });
 var parties_js_1 = require("./parties.js");
@@ -13,4 +13,6 @@ var third_party_js_1 = require("./third-party.js");
 Object.defineProperty(exports, "registerThirdPartyTools", { enumerable: true, get: function () { return third_party_js_1.registerThirdPartyTools; } });
 var monitoring_js_1 = require("./monitoring.js");
 Object.defineProperty(exports, "registerMonitoringTools", { enumerable: true, get: function () { return monitoring_js_1.registerMonitoringTools; } });
+var user_js_1 = require("./user.js");
+Object.defineProperty(exports, "registerUserTools", { enumerable: true, get: function () { return user_js_1.registerUserTools; } });
 //# sourceMappingURL=index.js.map

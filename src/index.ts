@@ -111,33 +111,75 @@ app.post("/api/check-token", async (req, res) => {
   }
 });
 
-// MCP endpoint – stateless, every request creates a new MCP session
-app.post("/mcp", async (req, res) => {
+// Session-based transport management
+const transports = new Map<string, any>();
+
+// Helper to clean up transports
+const cleanupTransport = (sessionId: string) => {
+  const t = transports.get(sessionId);
+  if (t) {
+    try {
+      t.close().catch(() => { });
+    } catch (e) { }
+    transports.delete(sessionId);
+  }
+};
+
+// MCP endpoint – Supports both stateless and stateful (Streamable HTTP) operation
+app.all("/mcp", async (req, res) => {
   try {
-    const token = await validateMcpKey(req.headers.authorization);
-    const server = createMcpServer(token);
+    const sessionId = req.headers["mcp-session-id"] as string || req.query.sessionId as string;
+    let transport: any;
 
-    const transport = new StreamableHTTPServerTransport({
-      sessionIdGenerator: undefined, // stateless
-    });
+    if (sessionId && transports.has(sessionId)) {
+      transport = transports.get(sessionId);
+    } else if (req.method === "POST") {
+      // If it's an initialization request or we don't have a session, create one
+      // (or handle it statelessly if desired, but stateful is better for SSE compatibility)
+      const token = await validateMcpKey(req.headers.authorization);
+      const server = createMcpServer(token);
 
-    res.on("close", () => {
-      transport.close().catch(() => { });
-      server.close().catch(() => { });
-    });
+      transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => transport.sessionId || Math.random().toString(36).substring(2, 15),
+        onsessioninitialized: (id) => {
+          transports.set(id, transport);
+        }
+      });
 
-    await server.connect(transport);
-    await transport.handleRequest(req, res, req.body);
+      res.on("close", () => {
+        // Only cleanup if it's not a persistent SSE session or if manually closed
+        // For stateless operation, we might want to cleanup immediately
+      });
+
+      await server.connect(transport);
+    } else if (req.method === "GET") {
+      // Direct GET without session is likely an attempt to establish SSE
+      // In StreamableHTTP, the client should have POSTed first to get a session ID
+      // But some clients might try GET directly if they follow old SSE patterns.
+      res.status(405).json({
+        jsonrpc: "2.0",
+        error: { code: -32000, message: "Use POST to initialize MCP session first." },
+        id: null,
+      });
+      return;
+    } else {
+      res.status(405).send("Method Not Allowed");
+      return;
+    }
+
+    if (transport) {
+      await transport.handleRequest(req, res, req.body);
+    }
   } catch (error: unknown) {
+    console.error("MCP Error:", error);
     if (!res.headersSent) {
-      // Determine HTTP status and JSON-RPC error code from error type
       let httpStatus = 500;
-      let errorCode = -32603; // Internal error
+      let errorCode = -32603;
       let message = "Internal server error";
 
       if (error instanceof AuthError) {
         httpStatus = 401;
-        errorCode = -32600; // Invalid request
+        errorCode = -32600;
         message = error.message;
       } else if (error instanceof EszerzodesError) {
         httpStatus = error.httpStatus ?? 500;
@@ -156,21 +198,40 @@ app.post("/mcp", async (req, res) => {
   }
 });
 
-// Handle GET and DELETE for MCP protocol (session management)
-app.get("/mcp", (_req, res) => {
-  res.status(405).json({
-    jsonrpc: "2.0",
-    error: { code: -32000, message: "SSE transport not supported. Use POST for stateless operation." },
-    id: null,
-  });
+// Explicitly support deprecated SSE transport for tools like 'mcp-remote'
+app.get("/sse", async (req, res) => {
+  try {
+    const { SSEServerTransport } = await import("@modelcontextprotocol/sdk/server/sse.js");
+    const token = await validateMcpKey(req.headers.authorization || (req.query.token as string));
+    const server = createMcpServer(token);
+    
+    const transport = new SSEServerTransport("/messages", res);
+    transports.set(transport.sessionId, transport);
+    
+    res.on("close", () => {
+      transports.delete(transport.sessionId);
+    });
+
+    await server.connect(transport);
+  } catch (error) {
+    console.error("SSE Error:", error);
+    if (!res.headersSent) res.status(500).send("Internal Server Error");
+  }
 });
 
-app.delete("/mcp", (_req, res) => {
-  res.status(405).json({
-    jsonrpc: "2.0",
-    error: { code: -32000, message: "Session termination not needed for stateless transport." },
-    id: null,
-  });
+app.post("/messages", async (req, res) => {
+  try {
+    const sessionId = req.query.sessionId as string;
+    const transport = transports.get(sessionId);
+    if (transport && typeof transport.handlePostMessage === "function") {
+      await transport.handlePostMessage(req, res, req.body);
+    } else {
+      res.status(400).send("Invalid session ID or transport type");
+    }
+  } catch (error) {
+    console.error("Messages Error:", error);
+    if (!res.headersSent) res.status(500).send("Internal Server Error");
+  }
 });
 
 const useStdio = process.argv.includes("--stdio");

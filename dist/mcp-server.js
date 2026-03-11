@@ -17,6 +17,7 @@ function createMcpServer(eszerzodesToken) {
     (0, index_js_1.registerDocumentTools)(server, client);
     (0, index_js_1.registerThirdPartyTools)(server, client);
     (0, index_js_1.registerMonitoringTools)(server, client);
+    (0, index_js_1.registerUserTools)(server, client);
     (0, prompts_js_1.registerPrompts)(server);
     return server;
 }

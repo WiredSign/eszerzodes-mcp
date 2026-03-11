@@ -7,6 +7,10 @@
     "type": "git",
     "url": "git+https://github.com/WiredSign/eszerzodes-mcp.git"
   },
+  "bugs": {
+    "url": "https://github.com/WiredSign/eszerzodes-mcp/issues"
+  },
+  "homepage": "https://github.com/WiredSign/eszerzodes-mcp#readme",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",

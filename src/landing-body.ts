@@ -111,7 +111,7 @@ export const BODY = `
     <a class="repo-name" href="#">mcp-server</a>
     <span class="repo-badge">Public</span>
     <div class="repo-actions">
-      <button class="repo-btn" onclick="copyText('https://api.eszerzodes.hu/mcp/mcp')">
+      <button class="repo-btn" id="copy-url-btn">
         <svg viewBox="0 0 16 16"><path d="M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z"/></svg>
         URL másolás
       </button>
@@ -349,11 +349,11 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
           <button class="deploy-tab active" onclick="switchDeploy(event,'dep-npm')">npm</button>
           <button class="deploy-tab" onclick="switchDeploy(event,'dep-docker')">Docker</button>
         </div>
-        <div id="dep-npm" class="deploy-content active"><pre class="code-block"><code>git clone &lt;repo-url&gt;
+        <div id="dep-npm" class="deploy-content active"><pre class="code-block"><code>git clone https://github.com/WiredSign/eszerzodes-mcp.git
 cd eszerzodes-mcp
 npm install && npm run build
 npm start</code></pre></div>
-        <div id="dep-docker" class="deploy-content"><pre class="code-block"><code>git clone &lt;repo-url&gt;
+        <div id="dep-docker" class="deploy-content"><pre class="code-block"><code>git clone https://github.com/WiredSign/eszerzodes-mcp.git
 cd eszerzodes-mcp
 npm run build
 docker compose up -d</code></pre></div>
@@ -572,9 +572,8 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
       <div class="sec-content" id="skills-content" style="display:none;">
         <!-- Jó hír highlight box -->
         <div style="background:rgba(63,185,80,0.1); border:1px solid rgba(63,185,80,0.3); border-radius:10px; padding:1rem 1.25rem; margin-bottom:1.5rem; display:flex; align-items:flex-start; gap:1rem">
-          <span style="font-size:1.5rem">🎉</span>
           <div>
-            <h4 style="color:var(--green); margin:0 0 0.25rem; font-size:1rem">Jó hír: Automatikus skillek!</h4>
+            <h4 style="color:var(--green); margin:0 0 0.25rem; font-size:1rem">Automatikus skillek!</h4>
             <p style="font-size:0.88rem; color:var(--text); line-height:1.5; margin:0">Ha az MCP szerver csatlakozik a <strong>Claude Desktop</strong>-hoz, a lenti 8 beépített skill/prompt <strong>automatikusan elérhető lesz</strong> a szerveren keresztül. Nem kell külön telepítened vagy bemásolnod őket – a Claude azonnal tudni fogja, hogyan kezelje a szerződéseidet!</p>
           </div>
         </div>
@@ -582,13 +581,13 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
         <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:1.5rem; flex-wrap:wrap; margin: 1rem 0;">
           <div style="flex:1; min-width:300px;">
             <p style="margin:0; font-size:0.85rem; color:var(--text-muted); line-height:1.4;">Ha viszont <strong>Claude Code</strong>-ot használsz (terminálból), vagy egyedi plugin-ként szeretnéd kezelni őket, akkor érdemes a projekt mappájába telepíteni. Futtasd ezt a parancsot a terminálban:</p>
-            <div class="config-path-box" style="margin-top:0.75rem; font-size:0.75rem; background:var(--bg); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:1rem;">
-              <code style="color:var(--text); word-break:break-all">curl -sL "https://api.eszerzodes.hu/mcp/api/download-skills" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip</code>
-              <button class="btn-mini" onclick="copyText('curl -sL &quot;https://api.eszerzodes.hu/mcp/api/download-skills&quot; -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip')">Másolás</button>
-            </div>
           </div>
           <div style="display:flex; gap:0.5rem; flex-wrap:wrap; align-items: stretch; justify-content: flex-end;">
             <a class="skill-banner-btn" href="https://api.eszerzodes.hu/mcp/api/download-skills" style="background:var(--blue); color:white; text-decoration:none; padding:0.6rem 1.2rem; border-radius:6px; font-weight:500; font-size:0.85rem; white-space:nowrap; display: flex; align-items: center; justify-content: center; gap: 0.4rem; min-height: 38px;">📥 Skillek letöltése (.zip)</a>
+          </div>
+          <div class="config-path-box" style="margin-top:0.75rem; font-size:0.75rem; background:var(--bg); padding:0.6rem 0.8rem; border-radius:6px; border:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; gap:1rem;">
+            <code style="color:var(--text); word-break:break-all">curl -sL "https://api.eszerzodes.hu/mcp/api/download-skills" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip</code>
+            <button class="btn-mini" onclick="copyText('curl -sL &quot;https://api.eszerzodes.hu/mcp/api/download-skills&quot; -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip')">Másolás</button>
           </div>
         </div>
         <div id="skills-container"></div>
@@ -856,6 +855,9 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
 </div>
 
 <script>
+const basePath = window.location.pathname.endsWith('/') ? window.location.pathname : window.location.pathname + '/';
+const api = (path) => basePath + (path.startsWith('/') ? path.slice(1) : path);
+
 function openAIPrompt(platform) {
   const url = window.location.href;
   const promptText = \`Vállalkozóként szeretném megérteni, hogy hogyan segít az Eszerződés.hu MCP Szerver és ez a technológia abban, hogy automatizálni tudjam a szerződéseimet és folyamataimat? Mik a legfontosabb eszközök és mire tudom használni ezt a rendszert? Kérlek olvasd el az itt található dokumentációt és eszközlistát: \${url} majd ajánlj 3-4 konkrét automatizálási/használati esetet!\`;
@@ -879,8 +881,8 @@ function showToast(){
 }
 
 function copyInstallCmd(btn) {
-  const url = window.location.origin + "/api/download-skills";
-  const cmd = \`curl -sL "\${url}" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d ~/Desktop/ && rm /tmp/esz-skills.zip\`;
+  const url = window.location.origin + api("/api/download-skills");
+  const cmd = \`curl -sL "\${url}" -o /tmp/esz-skills.zip && unzip -qo /tmp/esz-skills.zip -d .claude/skills/ && rm /tmp/esz-skills.zip\`;
   navigator.clipboard.writeText(cmd).then(()=>{
     const old = btn.innerHTML;
     btn.classList.add('btn-success');
@@ -942,7 +944,7 @@ async function checkConnection(btn) {
   result.style.alignItems = 'center';
   
   try {
-    const res = await fetch('/api/check-token', {
+    const res = await fetch(api('/api/check-token'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ apiKey })
@@ -1025,7 +1027,7 @@ function loadSkills() {
 
   cont.innerHTML = '<div style="padding:1rem;color:var(--text-muted);font-size:0.85rem">⌛ AI skillek betöltése...</div>';
 
-  fetch('/api/skills').then(r => {
+  fetch(api('/api/skills')).then(r => {
     if (!r.ok) throw new Error('Hiba a skillek lekérésekor: ' + r.status);
     return r.json();
   }).then(skills => {
@@ -1154,6 +1156,26 @@ document.addEventListener('DOMContentLoaded',()=>{
     // Click anywhere on the box to copy
     wrap.onclick=function(){copyCode(this.querySelector('.copy-btn'));};
   });
+
+  // Update hardcoded URLs to match current host
+  const fullMcpUrl = window.location.origin + api('mcp');
+  const fullDownloadUrl = window.location.origin + api('api/download-skills');
+  
+  document.querySelectorAll('code, pre, a, span, button').forEach(el => {
+    if (el.children.length > 0 && el.tagName !== 'A') return;
+    const original = el.innerHTML || el.textContent;
+    if (typeof original !== 'string') return;
+    
+    if (original.includes('https://api.eszerzodes.hu/mcp/mcp')) {
+      el.innerHTML = original.replace(/https:\/\/api\.eszerzodes\.hu\/mcp\/mcp/g, fullMcpUrl);
+    }
+    if (original.includes('https://api.eszerzodes.hu/mcp/api/download-skills')) {
+      el.innerHTML = original.replace(/https:\/\/api\.eszerzodes\.hu\/mcp\/api\/download-skills/g, fullDownloadUrl);
+    }
+  });
+
+  const mcpBtn = document.getElementById('copy-url-btn');
+  if (mcpBtn) mcpBtn.onclick = () => copyText(fullMcpUrl);
 });
 
 function showConfigModal(){

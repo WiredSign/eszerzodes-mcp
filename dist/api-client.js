@@ -79,6 +79,17 @@ class EszerzodesClient {
         const res = await fetch(url.toString(), options);
         return this.handleResponse(res, path);
     }
+    async postMultipart(path, formData) {
+        const res = await fetch(`${this.baseUrl}${path}`, {
+            method: "POST",
+            headers: {
+                Authorization: `Bearer ${this.token}`,
+                Accept: "application/json",
+            },
+            body: formData,
+        });
+        return this.handleResponse(res, path);
+    }
     async getDownloadUrl(path) {
         const url = `${this.baseUrl}${path}`;
         return url + `?token=${encodeURIComponent(this.token)}`;

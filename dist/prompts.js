@@ -486,5 +486,75 @@ Ha jóváhagytam, használd a \`contract_status_create\` eszközt egyenként (va
             }
         ]
     }));
+    // ── branding-beallitasa ──────────────────────────────────────────────
+    server.prompt("branding-beallitasa", `Egyedi arculat (branding) beállítása: logók, színek és stílusok proaktív testreszabása és aktiválása. Használd amikor a felhasználó meg akarja változtatni a szerződések vagy e-mailek kinézetét, vagy egy weboldal alapján kéri az arculat beállítását.`, {}, () => ({
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `Segíts beállítani az egyedi arculatomat (branding) az Eszerződés.hu fiókomban. 
+
+Kövesd az alábbi munkafolyamatot:
+
+## 1. Cég azonosítása
+Ha nem adtam meg, kérdezd meg mi a **cégem neve** vagy a **weboldalam címe (URL)**. 
+
+## 2. Arculati elemek kinyerése (Kreatív elemzés)
+Ha megadtam egy URL-t (pl. https://www.eszerzodes.hu):
+- Próbáld meg kinyerni a logó elérhetőségét, a domináns márkaszíneket (HEX) és ha van, egy jellegzetes háttérképet a weboldalról.
+- Prezentáld nekem, amit találtál, és kérj jóváhagyást az alkalmazásukra.
+
+## 3. Beállítás és Aktiválás (Minden egyben)
+A cél az, hogy ne csak elmentsük az adatokat, hanem **be is kapcsoljuk** a modulokat. Az alábbiakat állítsd be és aktiváld a jóváhagyásom után:
+- **Értesítő email fejléce**: Kép beállítása és aktiválása (\`contract_email_heading_enabled: true\`).
+- **Szerződés fejléc - Logó**: Logó beállítása és aktiválása (\`contract_header_logo_enabled: true\`).
+- **Szerződés stílusa**: Színek, háttérkép beállítása és a stílus aktiválása (\`contract_style_enabled: true\`).
+- **Egyedi kísérőlevél**: Állíts be egy alapértelmezett, profi szöveget az értesítő e-mailekhez (\`email_text\`), és engedélyezd a küldéskori szerkesztést (\`contract_email_edit_enabled: true\`).
+
+## 4. Technikai szabályok és Validáció
+A \`user_branding_update\` tool hívása előtt ügyelj a következőkre:
+- **Színek**: Csak érvényes HEX kód (#RRGGBB).
+- **Címsorok kiemelő színe**: A \`contract_email_background_color\` paramétert használd címsorok kiemeléséhez. Figyelj a **kontrasztarányra**: a szín legyen minimum 50%-kal sötétebb (vagy sötét irányba megfelelő kontrasztú), ha a márkaszín túl világos, hogy az e-mailekben olvasható maradjon a szöveg.
+- **Képek**: Tájékoztass a korlátokról (Logó/Email fejléc: max 200KB, Háttér: max 300KB).
+- **Email szöveg**: Segíts megfogalmazni egy profi, az arculathoz illő alapértelmezett kísérőlevelet. (Max 5000 karakter).
+- **Jogosultságok**: Az arculat módosításához olyan Bearer tokenre van szükség, amely rendelkezik a "user:write" hatókörrel (scope). Ha a művelet jogosultsági hiba miatt meghiúsul, kérd meg a felhasználót, hogy generáljon egy új tokent ezzel a jogosultsággal a [https://www.eszerzodes.hu/api-tokens](https://www.eszerzodes.hu/api-tokens) oldalon.
+
+## 5. Összegzés és Végrehajtás
+Mutass egy látványos összefoglalót a tervezett változásokról:
+- Milyen színek és képek lesznek beállítva (külön kiemelve a címsorok kódját).
+- Mi lesz a kísérőlevél alapértelmezett szövege.
+- Mely modulok lesznek bekapcsolva (Email fejléc, Logó, Stílus, Szerkeszthetőség).
+
+A jóváhagyásom után hajtsd végre a módosításokat.
+
+Mindig magyarul válaszolj, légy segítőkész és stílusos!`,
+                },
+            },
+        ],
+    }));
+    // ── api-token-segitseg ──────────────────────────────────────────────
+    server.prompt("api-token-segitseg", `Segítség az API kulcs (Bearer token) beszerzéséhez. Használd ha a felhasználó nem találja vagy nem tudja hol kell generálni a tokent az Eszerződés.hu-n.`, {}, () => ({
+        messages: [
+            {
+                role: "user",
+                content: {
+                    type: "text",
+                    text: `Hogyan tudok API kulcsot (Bearer tokent) szerezni az Eszerződés.hu fiókomhoz?
+            
+Az API token beszerzéséhez kövesd az alábbi lépéseket:
+1. Lépj be a fiókodba az [eszerzodes.hu](https://www.eszerzodes.hu) oldalon.
+2. Kattints a jobb felső sarokban a nevedre, majd válaszd a **Beállítások** menüpontot.
+3. A bal oldali menüben válaszd az **API** opciót.
+4. Közvetlen link: [https://www.eszerzodes.hu/api-tokens](https://www.eszerzodes.hu/api-tokens)
+5. Itt tudsz új "Személyes hozzáférési tokent" (Bearer token) generálni. 
+6. Adj neki egy nevet (pl. "Claude MCP"), és válaszd ki a szükséges jogosultságokat. 
+   - *Tipp: Ha az arculatot is szeretnéd AI-val módosítani, ne felejtsd el bejelölni a \`user:write\` jogosultságot!*
+   
+A generált tokent másold ki és használd az MCP szerver konfigurációjában.`
+                }
+            }
+        ]
+    }));
 }
 //# sourceMappingURL=prompts.js.map
