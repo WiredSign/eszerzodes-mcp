@@ -281,15 +281,22 @@ exports.BODY = `
           <button class="ai-pill" style="--ai-c:#2B88D8" onclick="switchAi(event,'cc-copilot')"><span class="dot"></span>Copilot</button>
         </div>
         <div id="cc-claude-desktop" class="ai-config active">
-          <ol style="margin-left: 1.5rem; margin-bottom: 0.8rem; line-height: 1.6;">
-            <li>Nyisd meg a <strong>Claude Desktop</strong> alkalmazást.</li>
-            <li>Menj a <strong>Settings → Connectors</strong> menüpontra.</li>
-            <li>Kattints az <strong>Add custom connector</strong> gombra.</li>
-            <li>Add meg ezeket az adatokat:<br>
-            <strong>URL:</strong> <code>https://api.eszerzodes.hu/mcp/mcp</code><br>
-            <strong>Auth header:</strong> <code>Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span></code></li>
-          </ol>
-          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Ez a legegyszerűbb mód, mivel a felhő relay URL-t a konfigurációs fájl jelenleg nem támogatja.</p>
+          <p>Szerkeszd a <a href="#" onclick="showConfigModal();return false;" style="color:var(--blue);text-decoration:underline">claude_desktop_config.json</a> fájlt (Előfeltétel: <a href="#" onclick="showNodeModal();return false;" style="color:var(--blue);text-decoration:underline">Node.js telepítése szükséges</a>):</p>
+          <pre class="code-block"><code>{
+  <span class="str">"mcpServers"</span>: {
+    <span class="str">"eszerzodes"</span>: {
+      <span class="str">"command"</span>: <span class="str">"npx"</span>,
+      <span class="str">"args"</span>: [
+        <span class="str">"-y"</span>,
+        <span class="str">"mcp-remote"</span>,
+        <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
+        <span class="str">"--header"</span>,
+        <span class="str">"Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
+      ]
+    }
+  }
+}</code></pre>
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">A Connectors UI nem támogatja a Bearer tokeneket, ezért a beépített HTTP proxy-t használjuk. Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
         </div>
         <div id="cc-claude-code" class="ai-config">
           <p style="margin-bottom:0.8rem">1. Szerver hozzáadása:</p>
@@ -702,7 +709,7 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
         <div class="prompt-cat" style="border-color: #f85149;">
           <div class="pc-header">🛡️ Audit & Kockázatelemzés <span class="pc-badge" style="background:#f85149">Expert</span></div>
           <div class="pc-body">
-            <div class="prompt-row" onclick="copyText('Készíts nekem egy teljes szerződés-intelligencia riportot az Eszerződés.hu rendszeremből. Lépj végig az alábbi szekvencián:\n1. Adatgyűjtés: Kérd le az összes szerződést, a sablonlistát, az egyéni státuszokat és a lejáró szerződéseket (90 napon belül). Számold ki az összesítőket.\n2. KPI összefoglaló: Mutasd meg: összes szerződés száma, vár aláírásra, draft, aláírt, sablonok száma, egyedi státuszcímkék.\n3. Pipeline egészség: Aláírási ráta (aláírt / összes kiküldött), elakadási index (7, 14, 30 napos szintek).\n4. Sablon-káosz rangsor: Típus szerinti csoportosítás, duplikátumok, javaslat összevonásra/törlésre.\n5. Státusz audit: Státuszcímkék száma, elavult/teszt címkék aránya, kanban-oszlop audit.\n6. Kockázati mátrix: 0–100 skálán (aláírási sebesség, konzisztencia, lejárati lefedettség, státusz tisztaság, folyamat fegyelem). Legkritikusabb kockázat kiemelése.\n7. Top 3 azonnali teendő: Konkrét lépések.\nAz egész riportot strukturáltan, szekciónként tagolva add vissza, számokkal alátámasztva.')">
+            <div class="prompt-row" onclick="copyText('Készíts nekem egy teljes szerződés-intelligencia riportot az Eszerződés.hu rendszeremből. Lépj végig az alábbi szekvencián:\\n1. Adatgyűjtés: Kérd le az összes szerződést, a sablonlistát, az egyéni státuszokat és a lejáró szerződéseket (90 napon belül). Számold ki az összesítőket.\\n2. KPI összefoglaló: Mutasd meg: összes szerződés száma, vár aláírásra, draft, aláírt, sablonok száma, egyedi státuszcímkék.\\n3. Pipeline egészség: Aláírási ráta (aláírt / összes kiküldött), elakadási index (7, 14, 30 napos szintek).\\n4. Sablon-káosz rangsor: Típus szerinti csoportosítás, duplikátumok, javaslat összevonásra/törlésre.\\n5. Státusz audit: Státuszcímkék száma, elavult/teszt címkék aránya, kanban-oszlop audit.\\n6. Kockázati mátrix: 0–100 skálán (aláírási sebesség, konzisztencia, lejárati lefedettség, státusz tisztaság, folyamat fegyelem). Legkritikusabb kockázat kiemelése.\\n7. Top 3 azonnali teendő: Konkrét lépések.\\nAz egész riportot strukturáltan, szekciónként tagolva add vissza, számokkal alátámasztva.')">
               <span class="prompt-icon">🔥</span>
               <span class="prompt-text" style="color:var(--blue); font-weight:600;">&ldquo;Eszerződés Intelligence Report &ndash; Teljes Audit&rdquo;</span>
             </div>

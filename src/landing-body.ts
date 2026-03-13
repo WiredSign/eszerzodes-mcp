@@ -76,20 +76,24 @@ export const BODY = `
       </div>
       <!-- Win -->
       <div id="m-win" class="modal-pane">
-        <p style="font-size:0.9rem;margin-bottom:0.8rem">Windows-on a mappát így éred el:</p>
+        <p style="font-size:0.9rem;margin-bottom:0.8rem">Windows-on a mappát így éred el (vagy próbáld a Local mappát):</p>
         <div class="config-path-box">
           %APPDATA%\Claude
-          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('%APPDATA%\\Claude')">Másolás</button>
+          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('%APPDATA%\\\\Claude')">Másolás</button>
+        </div>
+        <div class="config-path-box">
+          %LOCALAPPDATA%\Claude
+          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('%LOCALAPPDATA%\\\\Claude')">Másolás</button>
         </div>
         <ol style="font-size:0.85rem;color:var(--text-muted);padding-left:1.2rem;line-height:1.6">
           <li>Nyomd meg a <strong>Win + R</strong> billentyűkombinációt.</li>
-          <li>Másold be a fenti útvonalat és nyomj Enter-t.</li>
+          <li>Másold be az egyik fenti útvonalat és nyomj Enter-t.</li>
           <li>Itt találod (vagy hozd létre) a <code style="color:var(--blue)">claude_desktop_config.json</code> fájlt.</li>
         </ol>
-        <p style="font-size:0.85rem;margin-top:1rem;color:var(--text-subtle)">Vagy használd ezt a parancsot PowerShellben:</p>
+        <p style="font-size:0.85rem;margin-top:1rem;color:var(--text-subtle)">Vagy keresd meg a fájlt ezzel a PowerShell paranccsal:</p>
         <div class="config-path-box" style="font-size:0.75rem">
-          if (!(Test-Path "$env:APPDATA\Claude")) { New-Item -ItemType Directory -Path "$env:APPDATA\Claude" }; if (!(Test-Path "$env:APPDATA\Claude\claude_desktop_config.json")) { New-Item -ItemType File -Path "$env:APPDATA\Claude\claude_desktop_config.json" }; notepad "$env:APPDATA\Claude\claude_desktop_config.json"
-          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('if (!(Test-Path &quot;$env:APPDATA\\Claude&quot;)) { New-Item -ItemType Directory -Path &quot;$env:APPDATA\\Claude&quot; }; if (!(Test-Path &quot;$env:APPDATA\\Claude\\claude_desktop_config.json&quot;)) { New-Item -ItemType File -Path &quot;$env:APPDATA\\Claude\\claude_desktop_config.json&quot; }; notepad &quot;$env:APPDATA\\Claude\\claude_desktop_config.json&quot;')">Másolás</button>
+          Get-ChildItem -Path $env:USERPROFILE -Recurse -Filter "claude_desktop_config.json" 2>$null
+          <button class="btn-mini" style="position:absolute;right:5px;top:5px" onclick="copyText('Get-ChildItem -Path $env:USERPROFILE -Recurse -Filter &quot;claude_desktop_config.json&quot; 2>$null')">Másolás</button>
         </div>
       </div>
     </div>
@@ -279,7 +283,14 @@ export const BODY = `
         </div>
         <div id="cc-claude-desktop" class="ai-config active">
           <p>Szerkeszd a <a href="#" onclick="showConfigModal();return false;" style="color:var(--blue);text-decoration:underline">claude_desktop_config.json</a> fájlt (Előfeltétel: <a href="#" onclick="showNodeModal();return false;" style="color:var(--blue);text-decoration:underline">Node.js telepítése szükséges</a>):</p>
-          <pre class="code-block"><code>{
+          
+          <div class="deploy-tabs" style="margin-top: 1rem;">
+            <button class="deploy-tab active" onclick="switchDeploy(event,'cc-cd-mac')">macOS / Linux</button>
+            <button class="deploy-tab" onclick="switchDeploy(event,'cc-cd-win')">Windows</button>
+          </div>
+          
+          <div id="cc-cd-mac" class="deploy-content active">
+            <pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
       <span class="str">"command"</span>: <span class="str">"npx"</span>,
@@ -293,7 +304,28 @@ export const BODY = `
     }
   }
 }</code></pre>
-          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">A Connectors UI nem támogatja a Bearer tokeneket, ezért a beépített HTTP proxy-t használjuk. Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
+          </div>
+          
+          <div id="cc-cd-win" class="deploy-content">
+            <pre class="code-block"><code>{
+  <span class="str">"mcpServers"</span>: {
+    <span class="str">"eszerzodes"</span>: {
+      <span class="str">"command"</span>: <span class="str">"cmd"</span>,
+      <span class="str">"args"</span>: [
+        <span class="str">"/c"</span>,
+        <span class="str">"npx"</span>,
+        <span class="str">"-y"</span>,
+        <span class="str">"mcp-remote"</span>,
+        <span class="str">"https://api.eszerzodes.hu/mcp/mcp"</span>,
+        <span class="str">"--header"</span>,
+        <span class="str">"Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
+      ]
+    }
+  }
+}</code></pre>
+          </div>
+          
+          <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Mivel a Claude Desktop UI jelenleg nem támogat egyedi fejléceket (headers), beépített proxy gyanánt az <code>mcp-remote</code> csomagot használjuk. Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
         </div>
         <div id="cc-claude-code" class="ai-config">
           <p style="margin-bottom:0.8rem">1. Szerver hozzáadása:</p>
@@ -373,7 +405,14 @@ docker compose up -d</code></pre></div>
         </div>
         <div id="sc-claude-desktop" class="ai-config active">
           <p>Szerkeszd a <a href="#" onclick="showConfigModal();return false;" style="color:var(--blue);text-decoration:underline">claude_desktop_config.json</a> fájlt (Előfeltétel: <a href="#" onclick="showNodeModal();return false;" style="color:var(--blue);text-decoration:underline">Node.js telepítése szükséges</a> a szerver futtatásához):</p>
-          <pre class="code-block"><code>{
+          
+          <div class="deploy-tabs" style="margin-top: 1rem;">
+            <button class="deploy-tab active" onclick="switchDeploy(event,'sc-cd-mac')">macOS / Linux</button>
+            <button class="deploy-tab" onclick="switchDeploy(event,'sc-cd-win')">Windows</button>
+          </div>
+          
+          <div id="sc-cd-mac" class="deploy-content active">
+            <pre class="code-block"><code>{
   <span class="str">"mcpServers"</span>: {
     <span class="str">"eszerzodes"</span>: {
       <span class="str">"command"</span>: <span class="str">"npx"</span>,
@@ -387,6 +426,27 @@ docker compose up -d</code></pre></div>
     }
   }
 }</code></pre>
+          </div>
+          
+          <div id="sc-cd-win" class="deploy-content">
+            <pre class="code-block"><code>{
+  <span class="str">"mcpServers"</span>: {
+    <span class="str">"eszerzodes"</span>: {
+      <span class="str">"command"</span>: <span class="str">"cmd"</span>,
+      <span class="str">"args"</span>: [
+        <span class="str">"/c"</span>,
+        <span class="str">"npx"</span>,
+        <span class="str">"-y"</span>,
+        <span class="str">"mcp-remote"</span>,
+        <span class="str">"http://localhost:3000/mcp"</span>,
+        <span class="str">"--header"</span>,
+        <span class="str">"Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</span>"</span>
+      ]
+    }
+  }
+}</code></pre>
+          </div>
+          
           <p style="margin-top:0.5rem;font-size:0.85rem;color:var(--text-subtle);">Mentés után <strong>teljesen zárd be</strong>, majd indítsd újra a Claude Desktop-ot.</p>
         </div>
         <div id="sc-claude-code" class="ai-config">
@@ -639,10 +699,13 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
         <div class="prompt-cat">
           <div class="pc-header">✍️ Szerződéskezelés</div>
           <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Listázd ki az utolsó 10 szerződésem')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Utolsó 10 szerződés listázása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Listázd ki az utolsó 5 aláíratlan szerződésem')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Utolsó 5 aláíratlan szerződés&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Frissítsd a státuszát a(z) XY szerződésemnek erre a státuszra: xy')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Szerződés státuszának módosítása&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Küldj ki egy Próbaszerződés tesztelésre sablonszerződést a következő email címre: valami@egypartneremail.hu')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon kiküldése emailre&rdquo;</span></div>
+            <div class="prompt-row" onclick="copyText('Küldj ki egy emlékeztetőt a(z) XY partner aláíratlan szerződéseire')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Emlékeztető küldése partnernek&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Hozz létre egy NDA-t a Teszt Kft.-nek')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Új NDA létrehozása&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Keresd meg a bérleti sablont és küldj meghívót')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon keresés & Meghívó&rdquo;</span></div>
-            <div class="prompt-row" onclick="copyText('Vegyél fel egy új munkatársat, kérd be az e-mail címét, a jogkörét és az aláírási jogot')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatárs meghívása&rdquo;</span></div>
-            <div class="prompt-row" onclick="copyText('Segíts beállítani az egyedi arculatomat: színek, logók, e-mail fejléc és egyedi szövegek.')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Egyedi branding beállítása&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Töltsd fel ezt a PDF-et, és készíts belőle egy új szerződést a minta.pdf néven!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Új szerződés PDF feltöltéssel&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Módosítsd a \'Mérnöki szerződés\' sablonban a \'Díj\' mező alapértelmezett értékét 150.000 Ft-ra!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon mező alapérték módosítás&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Archiváld az összes olyan sablont, amit több mint egy éve nem használtunk!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Sablon-tárhely karbantartás&rdquo;</span></div>
@@ -659,7 +722,8 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
             <div class="prompt-row" onclick="copyText('Használd a cégem színeit (főszín: #2b88d8) az Eszerződés felületén és az e-mail háttérben!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Színvilág testreszabása (HEX)&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Frissítsd a logómat erről az URL-ről: [URL] és kapcsold be a megjelenítését a szerződéseken!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Logó frissítése & Bekapcsolása&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Állíts be egy elegáns háttérképet a szerződéseimnek és engedélyezd az egyedi stílust!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Prémium megjelenés aktiválása&rdquo;</span></div>
-          </div>
+            <div class="prompt-row" onclick="copyText('Segíts beállítani az egyedi arculatomat: színek, logók, e-mail fejléc és egyedi szövegek.')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Egyedi branding beállítása&rdquo;</span></div>
+            </div>
         </div>
 
         <!-- 4. Automáció -->
@@ -695,6 +759,7 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
         <div class="prompt-cat">
           <div class="pc-header">👥 Csapat & Munkatársak</div>
           <div class="pc-body">
+            <div class="prompt-row" onclick="copyText('Vegyél fel egy új munkatársat, kérd be az e-mail címét, a jogkörét és az aláírási jogot')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatárs meghívása&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Listázd ki a munkatársaimat és mutasd meg kinek van aláírási joga')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatársi lista & Jogkörök&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Vegyél fel egy új munkatársat: varga.janos@teszt.hu, adj neki szerkesztő jogkört és engedélyezd az aláírást!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Új munkatárs hozzáadása&rdquo;</span></div>
             <div class="prompt-row" onclick="copyText('Vond vissza kovacs.bela@teszt.hu minden hozzáférését, távolítsd el a fiókból!')"><span class="prompt-icon">▸</span><span class="prompt-text">&ldquo;Munkatárs eltávolítása&rdquo;</span></div>
@@ -706,7 +771,7 @@ Header: Authorization: Bearer <span class="token-placeholder">&lt;TOKEN&gt;</spa
         <div class="prompt-cat" style="border-color: #f85149;">
           <div class="pc-header">🛡️ Audit & Kockázatelemzés <span class="pc-badge" style="background:#f85149">Expert</span></div>
           <div class="pc-body">
-            <div class="prompt-row" onclick="copyText('Készíts nekem egy teljes szerződés-intelligencia riportot az Eszerződés.hu rendszeremből. Lépj végig az alábbi szekvencián:\n1. Adatgyűjtés: Kérd le az összes szerződést, a sablonlistát, az egyéni státuszokat és a lejáró szerződéseket (90 napon belül). Számold ki az összesítőket.\n2. KPI összefoglaló: Mutasd meg: összes szerződés száma, vár aláírásra, draft, aláírt, sablonok száma, egyedi státuszcímkék.\n3. Pipeline egészség: Aláírási ráta (aláírt / összes kiküldött), elakadási index (7, 14, 30 napos szintek).\n4. Sablon-káosz rangsor: Típus szerinti csoportosítás, duplikátumok, javaslat összevonásra/törlésre.\n5. Státusz audit: Státuszcímkék száma, elavult/teszt címkék aránya, kanban-oszlop audit.\n6. Kockázati mátrix: 0–100 skálán (aláírási sebesség, konzisztencia, lejárati lefedettség, státusz tisztaság, folyamat fegyelem). Legkritikusabb kockázat kiemelése.\n7. Top 3 azonnali teendő: Konkrét lépések.\nAz egész riportot strukturáltan, szekciónként tagolva add vissza, számokkal alátámasztva.')">
+            <div class="prompt-row" onclick="copyText('Készíts nekem egy teljes szerződés-intelligencia riportot az Eszerződés.hu rendszeremből. Lépj végig az alábbi szekvencián:\\n1. Adatgyűjtés: Kérd le az összes szerződést, a sablonlistát, az egyéni státuszokat és a lejáró szerződéseket (90 napon belül). Számold ki az összesítőket.\\n2. KPI összefoglaló: Mutasd meg: összes szerződés száma, vár aláírásra, draft, aláírt, sablonok száma, egyedi státuszcímkék.\\n3. Pipeline egészség: Aláírási ráta (aláírt / összes kiküldött), elakadási index (7, 14, 30 napos szintek).\\n4. Sablon-káosz rangsor: Típus szerinti csoportosítás, duplikátumok, javaslat összevonásra/törlésre.\\n5. Státusz audit: Státuszcímkék száma, elavult/teszt címkék aránya, kanban-oszlop audit.\\n6. Kockázati mátrix: 0–100 skálán (aláírási sebesség, konzisztencia, lejárati lefedettség, státusz tisztaság, folyamat fegyelem). Legkritikusabb kockázat kiemelése.\\n7. Top 3 azonnali teendő: Konkrét lépések.\\nAz egész riportot strukturáltan, szekciónként tagolva add vissza, számokkal alátámasztva.')">
               <span class="prompt-icon">🔥</span>
               <span class="prompt-text" style="color:var(--blue); font-weight:600;">&ldquo;Eszerződés Intelligence Report &ndash; Teljes Audit&rdquo;</span>
             </div>
